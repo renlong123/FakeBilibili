@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!--扫描注入service层bean-->
+    <context:component-scan base-package="com.fakebilibili.service"></context:component-scan>
+
+    <!--placerholer可以读取配置文件，单独进行配置，注意placerholer默认只能定义一次，多余的spring会自动忽略。
+    只需要在context:property-placeholder标签中添加一个属性ignore-unresolvable="true"即可-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+
+    <!--配置连接池-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="maxWait" value="${jdbc.druid.maxWait}"></property>
+        <property name="maxActive" value="${jdbc.druid.maxActive}"></property>
+    </bean>
+
+    <!--将mybatis sqlSession工厂交给spring创建-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--连接池数据源-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!--配置mybatis配置文件位置-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <!--为实体类定义别名，可以在mapper中不写全类名-->
+        <property name="typeAliasesPackage" value="com.fakebilibili.entity"></property>
+    </bean>
+
+    <!--定义mapper文件所在包，mybatis扫描该包-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.fakebilibili.mapper"></property>
+    </bean>
+
+    <!--事务管理-->
+    <!---->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" isolation="DEFAULT" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="pointService" expression="execution(* com.fakebilibili.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointService"></aop:advisor>
+    </aop:config>
+
+</beans>
+
+
+<!--
+需学习的内容：事务管理具体配置，事务传播行为
+-->
