@@ -4,13 +4,31 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:applicationContext.xml</param-value>
   </context-param>
 
-<!--
+  <!--
+    <filter>
+      <filter-name>log4jServletFilter</filter-name>
+      <filter-class>org.apache.logging.log4j.web.Log4jServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+      <filter-name>log4jServletFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
+  -->
+
+  <!-- org.springframework.web.util.Log4jConfigListener 被废弃了-->
+<!--  <listener>
+    <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
+  </listener>-->
+  <!-- log4j2-begin -->
+
   <filter>
     <filter-name>log4jServletFilter</filter-name>
     <filter-class>org.apache.logging.log4j.web.Log4jServletFilter</filter-class>
@@ -19,12 +37,10 @@
     <filter-name>log4jServletFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
--->
-
-  <!-- org.springframework.web.util.Log4jConfigListener 被废弃了-->
-<!--  <listener>
+  <!-- log4j2-end -->
+  <listener>
     <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
-  </listener>-->
+  </listener>
 
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -44,9 +60,14 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
+  <welcome-file-list>
+    <!--会被/拦截-->
+    <welcome-file>/WEB-INF/html/index.html</welcome-file>
+  </welcome-file-list>
+
 </web-app>
 
 <!--
 监听器如何工作的？
-org.springframework.web.util.Log4jConfigListener被废弃，如何使用log4j2?
+org.springframework.web.util.Log4jConfigListener被废弃，如何使用log4j2?使用log4j2
 -->
