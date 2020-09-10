@@ -18,20 +18,20 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <img th:src="@{/static/img/014.jpg}" style="width: 100%;height: 100px"/>
+                <img th:src="@{/static/img/loginBack.jpg}" style="width: 100%;height: 100px"/>
             </div>
         </div>
     </div>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1 style="text-align: center">登录</h1>
+                <h1 style="text-align: center">注册</h1>
             </div>
         </div>
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-11">
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label for="inputusername3" class="col-sm-2 control-label">用户名</label>
@@ -72,10 +72,10 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-4">
-                            <button type="submit" class="btn btn-success btn-block">登录</button>
+                            <button type="button" class="btn btn-success btn-block" onclick="loginButtonActive()">登录</button>
                         </div>
                         <div class="col-sm-offset-2 col-sm-4">
-                            <button type="button" class="btn btn-warning btn-block">注册</button>
+                            <button type="submit" class="btn btn-warning btn-block">注册</button>
                         </div>
                     </div>
                 </form>
@@ -86,4 +86,16 @@
 
 <div th:include="footer :: footer"></div>
 </body>
+
+<script th:inline="javascript">
+    $(function () {
+
+        }
+    );
+
+    function loginButtonActive() {
+        var path = [[${#request.getContextPath()}]];
+        window.location.href=path+"/login";
+    }
+</script>
 </html>

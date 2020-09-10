@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class ErrorController {
 
@@ -20,11 +22,12 @@ public class ErrorController {
     }
 
     @RequestMapping("/500")
-    public String page500(Model model){
+    public String page500(Model model, HttpServletRequest request){
         logger.error("500错误，服务器内部错误");
         model.addAttribute("errorCode",500);
         model.addAttribute("msg","服务器内部发生错误，请与管理员联系");
         return "error/defaultError";
+
     }
 
 }

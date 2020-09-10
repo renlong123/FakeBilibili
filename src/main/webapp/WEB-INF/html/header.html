@@ -50,7 +50,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="" style="margin: 0 10px;padding: 10px 0;"><!--调整边距使图片居中-->
+                <a class="navbar-brand" th:href="@{/hello}" style="margin: 0 10px;padding: 10px 0;"><!--调整边距使图片居中-->
                     <img alt="Bilibili" th:src="@{/static/img/bilibili.png}">
                 </a>
             </div>
@@ -58,7 +58,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">主站 <span class="sr-only">(current)</span></a></li>
+                    <li><a th:href="@{/hello}">主站 <span class="sr-only">(current)</span></a></li><!-- class="active"-->
                     <li><a href="#">番剧</a></li>
                     <li><a href="#">游戏</a></li>
                     <li><a href="#">论坛</a></li>
@@ -82,8 +82,12 @@
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">登录</a></li>
-                    <li><a href="#">注册</a></li>
+                    <!--第一次必须使用request请求获取session，不然session不会产生-->
+                    <li><a th:href="@{/login}" th:if="${#request.getSession().getAttribute('username')} == null" th:text="登录"></a></li>
+                    <li><a th:href="@{/register}" th:if="${#session.getAttribute('username')} == null" th:text="注册"></a></li>
+                    <li><a th:href="@{/personIndex}" th:if="${#session.getAttribute('username')}!=null" th:text="'欢迎您,'+${#session.getAttribute('username')}"></a></li>
+                    <li><a th:if="${#session.getAttribute('username')}!=null" th:text="退出" id="exitButton"></a></li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">其他<span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -98,6 +102,40 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="logOutModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">确认退出？</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>确定要退出吗？退出后需要重新登录！</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">手滑了</button>
+                        <button type="button" class="btn btn-primary" id="logOutConfirm">是的，我要退出</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <script th:inline="javascript">
+            $(function () {
+                    /*启动模态框*/
+                    $("#exitButton").click(function () {
+                        $('#logOutModal').modal('show');
+                    });
+                    /*跳转至退出页面*/
+                    $("#logOutConfirm").click(function () {
+                        var path = [[${#request.getContextPath()}]];
+                        var username = [[${#session.getAttribute("username")}]];
+                        window.location.href=path+"/loginOut/"+username;
+                    });
+                }
+            );
+        </script>
     </div>
 </body>
 </html>

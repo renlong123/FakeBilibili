@@ -18,7 +18,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <img th:src="@{/static/img/014.jpg}" style="width: 100%;height: 100px"/>
+                    <img th:src="@{/static/img/loginBack.jpg}" style="width: 100%;height: 120px"/>
                 </div>
             </div>
         </div>
@@ -32,37 +32,41 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-5">
-                    <img th:src="@{/static/img/012.jpg}" style="width: 550px;height: 300px"/>
+                    <img th:src="@{/static/img/b010.jpg}" style="width: 550px;height: 300px"/>
                 </div>
                 <div class="col-md-offset-1 col-md-5">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" th:action="@{/login}" method="post">
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+                            <label for="inputtext3" class="col-sm-2 control-label">用户名</label>
                             <div class="col-sm-10">
-                                <input type="email" class="form-control" id="inputEmail3" placeholder="请输入用户名">
+                                <input type="text" name="username" class="form-control" id="inputtext3" placeholder="请输入用户名">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" id="inputPassword3" placeholder="请输入密码">
+                                <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="请输入密码">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputCheck3" class="col-sm-2 control-label">验证码</label>
-                            <div class="col-sm-8">
-                                <input type="password" class="form-control" id="inputCheck3" placeholder="请输入验证码">
+                            <div class="col-sm-7">
+                                <input type="text" name="checkNumber" class="form-control" id="inputCheck3" placeholder="请输入验证码">
                             </div>
-                            <div class="col-sm-1">
-                                <span class="label label-info" style="font-size: medium">x1D2</span>
+                            <div class="col-sm-3">
+                                <img id="checkCodeImg" th:src="@{login/refreshCheckCode}" style="width: 80px;height: 24px"/>
+                                <!--<span class="label label-info" style="font-size: medium" id="checkNumberSet">x1D2</span>-->
                             </div>
                             <!--<label for="inputCheck3" class="col-sm-2 control-label" style="text-align: center;background-color: #5bc0de">x1D2</label>-->
                         </div>
+
+                        <label id="tipsLabel" th:text="${#request.getAttribute('loginErrorTips')} == null ? '':${#request.getAttribute('loginErrorTips')}"
+                               style="margin-left: 80px;color: red"></label>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox">记住密码
+                                        <input type="checkbox" name="remenberMe">记住密码
                                     </label>
                                 </div>
                             </div>
@@ -72,7 +76,7 @@
                                 <button type="submit" class="btn btn-success btn-block">登录</button>
                             </div>
                             <div class="col-sm-offset-2 col-sm-4">
-                                <button type="button" class="btn btn-warning btn-block">注册</button>
+                                <button type="button" class="btn btn-warning btn-block" id="registerInlogin" onclick="registerButtonActive()">注册</button>
                             </div>
                         </div>
                     </form>
@@ -83,4 +87,34 @@
 
     <div th:include="footer :: footer"></div>
 </body>
+
+<script th:inline="javascript">
+    $(function () {
+        $.ajaxSetup({
+            cache: false
+        });
+        $("#checkCodeImg").click(function () {
+            var path = [[${#request.getContextPath()}]];
+            var pathfull = path+"/login/refreshCheckCode?time="+new Date().getTime();
+            /*jquey不能直接使用.src赋值*/
+            $("#checkCodeImg").attr("src",pathfull);
+            $("#tipsLabel").attr("value","");
+        });
+        $("#inputCheck3").blur(function () {
+            var checkCode = [[${session.IdentifyCode}]];
+            if($("#inputCheck3").val().toLowerCase() != checkCode.toString().toLowerCase()){
+                $("#tipsLabel").attr("value","验证码错误");
+            }else{
+                alert(1);
+                $("#tipsLabel").attr("value","");
+            }
+        });
+        }
+    );
+
+    function registerButtonActive() {
+        var path = [[${#request.getContextPath()}]];
+        window.location.href=path+"/register";
+    }
+</script>
 </html>

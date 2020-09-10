@@ -47,6 +47,17 @@
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/personIndex"/>
+            <mvc:mapping path="/hello"/>
+            <mvc:mapping path="/"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/loginOut/*"/>
+            <mvc:exclude-mapping path="/register"/>
+            <bean class="com.fakebilibili.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <!-- Spring MVC提供的简单异常处理器SimpleMappingExceptionResolver-全局异常配置 start -->
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">

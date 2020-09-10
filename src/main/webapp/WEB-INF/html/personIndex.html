@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base href="${#request.getContextPath()+'/'}"/>
+    <link rel="stylesheet"  th:href="@{/static/bootstrap/css/bootstrap.css }"/>
+    <script type="text/javascript"  th:src="@{/static/bootstrap/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
+    <!--<link rel="icon" th：href="@{/static/img/favicon.ico}"/>-->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+    <title>个人主页</title>
+</head>
+<body>
+    <div th:include="header :: header"></div>
+    个人主页
+    <div th:include="footer :: footer"></div>
+</body>
+</html>
