@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base href="${#request.getContextPath()+'/'}"/>
+    <link rel="stylesheet"  th:href="@{/static/bootstrap/css/bootstrap.css }"/>
+    <script type="text/javascript"  th:src="@{/static/bootstrap/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
+    <!--<link rel="icon" th：href="@{/static/img/favicon.ico}"/>-->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+    <title>请注册</title>
+</head>
+<body>
+
+<div th:include="header :: header"></div>
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <img th:src="@{/static/img/014.jpg}" style="width: 100%;height: 100px"/>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 style="text-align: center">登录</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputusername3" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputusername3" placeholder="请输入用户名">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="请输入密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputemail3" class="col-sm-2 control-label">邮箱</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputemail3" placeholder="请输入邮箱">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputCheck3" class="col-sm-2 control-label">验证码</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" id="inputCheck3" placeholder="请输入验证码">
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-success btn-block">获取验证码</button>
+                        </div>
+                        <!--<label for="inputCheck3" class="col-sm-2 control-label" style="text-align: center;background-color: #5bc0de">x1D2</label>-->
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox">我已同意用户协议
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-4">
+                            <button type="submit" class="btn btn-success btn-block">登录</button>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-4">
+                            <button type="button" class="btn btn-warning btn-block">注册</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="footer :: footer"></div>
+</body>
+</html>

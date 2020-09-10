@@ -1,10 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<!--    <meta charset="UTF-8">
+    <title>Title</title>-->
 </head>
 <body>
+    <div th:fragment="footer">
+        <hr/>
+        <!--内容-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div>
+                        <div>bilibli</div>
+                    </div>
+                    <br/>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">加入我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    <div>
+                        <div>传送门</div>
+                    </div>
+                    <br/>
+                    <label style="width: 100px"><a href="#">帮助中心</a></label>
+                    <label style="width: 100px"><a href="#">清泉申诉</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">用户反馈</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                    <label style="width: 100px"><a href="#">关于我们</a></label>
+                </div>
+                <div class="col-md-3">
+                    <div class="table">
+                        <tr>
+                            <td>
+                                <label style="height: 80px;width: 80px">
+                                    <a href="#">
+                                        <img th:src="@{/static/img/bilibili.png}" style="width: 40px;height: 40px">
+                                        <p>官网</p>
+                                    </a>
+                                </label>
+                            </td>
+                            <td>
+                                <label style="height: 80px;width: 80px">
+                                    <a href="#">
+                                        <img th:src="@{/static/img/bilibili.png}" style="width: 40px;height: 40px">
+                                        <p>微信</p>
+                                    </a>
+                                </label>
+                            </td>
+                        </tr>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="palceholderDiv8" style="width: 100%;height: 10px"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-1">
+                    <img th:src="@{/static/img/013.jpeg}" style="width: 80px;height: 140px">
+                </div>
+                <div class="col-md-11">
+                    <div style="font-size: small">
+                        营业执照 信息网络传播视听节目许可证：0910417 网络文化经营许可证 沪网文【2019】3804-274号 广播电视节目制作经营许可证：（沪）字第01248号 <br/>
+                        增值电信业务经营许可证 沪B2-20100043 互联网ICP备案：沪ICP备13002172号-3 出版物经营许可证 沪批字第U6699 号 互联网药品信息服务资格证 沪-非经营性-2016-0143<br/>
+                        营业性演出许可证 沪市文演（经）00-2253<br/>
 
+                        违法不良信息举报邮箱：help@bilibili.com |违法不良信息举报电话：4000233233转3<br/>
+
+                        上海互联网举报中心 | 12318全国文化市场举报网站 | 沪公网安备31011002002436号 | 儿童色情信息举报专区 | 扫黄打非举报<br/>
+
+                        网上有害信息举报专区：中国互联网违法和不良信息举报中心<br/>
+
+                        亲爱的市民朋友，上海警方反诈劝阻电话“962110”系专门针对避免您财产被骗受损而设，请您一旦收到来电，立即接听。<br/>
+
+                        公司名称：上海宽娱数码科技有限公司|公司地址：上海市杨浦区政立路485号|电话：021-25099888<br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
