@@ -13,16 +13,57 @@
     <!--扫描controller-->
     <context:component-scan base-package="com.fakebilibili.controller"></context:component-scan>
     <!--将静态文件映射到/static-->
-    <mvc:resources mapping="/WEB-INF/static/**" location="/WEB-INF/static/"></mvc:resources>
-    <mvc:resources mapping="/WEB-INF/html/**" location="/WEB-INF/html/"></mvc:resources>
+<!--    <mvc:resources mapping="/WEB-INF/static/**" location="/WEB-INF/static/"></mvc:resources>
+    <mvc:resources mapping="/WEB-INF/static/css/**" location="/WEB-INF/static/css/"></mvc:resources>
+    <mvc:resources mapping="/WEB-INF/static/bootstrap/**" location="/WEB-INF/static/bootstrap/"></mvc:resources>-->
+<!--    <mvc:resources mapping="/WEB-INF/static/**" location="/WEB-INF/static/"></mvc:resources>-->
+   <!-- <mvc:resources mapping="/WEB-INF/html/**" location="/WEB-INF/html/"></mvc:resources>-->
     <!--<mvc:annotation-driven/>标签主要是用来帮助我们处理请求映射，决定是哪个controller的哪个方法来
     处理当前请求，以及异常处理,这个标签其实是可以省略不写的-->
+    <mvc:default-servlet-handler/>
     <mvc:annotation-driven/>
+ <!--   <mvc:resources mapping="/static/img/**" location="/static/img/"></mvc:resources>-->
+    <!--默认界面时需要跳转到这里来，经过模板引擎渲染，不然没有效果-->
+    <mvc:view-controller path="/" view-name="forward:/hello"/>
 
     <!--配置视图解析器-->
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/html/"></property>
-        <property name="suffix" value=".html"></property>
+   <bean id="templateResolver"
+          class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/html/"/>
+        <property name="suffix" value=".html"/>
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="order" value="1"/>
+        <property name="templateMode" value="HTML5"/>
+        <property name="cacheable" value="false"/>
     </bean>
+
+    <bean id="templateEngine"
+          class="org.thymeleaf.spring5.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver"/>
+    </bean>
+
+    <bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine"/>
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
+
+
+    <!-- Spring MVC提供的简单异常处理器SimpleMappingExceptionResolver-全局异常配置 start -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <!--  默认的错误信息页面-->
+        <property name="defaultErrorView" value="/WEB-INF/html/error/500.html"/>
+        <!--定义异常信息变量名，默认为exception-->
+        <property name="exceptionAttribute" value="exception"></property>
+        <!--定义需要特殊处理的异常-->
+        <property name="exceptionMappings">
+            <props>
+                <!-- 自定义的异常类 -->
+                <prop key="com.fakebilibili.exception.MyException">/WEB-INF/html/error/500.html</prop>
+            </props>
+        </property>
+        <property name="warnLogCategory" value="WARN"></property>
+        <property name="defaultStatusCode" value="500"></property>
+    </bean>
+    <!-- 全局异常配置 end -->
 
 </beans>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 align="center">全局异常处理器</h1>
+<p th:text="错误码： +${errorCode}"></p>
+<p th:text="${msg}"></p>
+<p th:text="详细信息： +${exception}"></p>
+</body>
+</html>
