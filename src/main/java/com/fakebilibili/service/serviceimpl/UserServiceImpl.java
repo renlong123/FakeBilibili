@@ -6,12 +6,14 @@ import com.fakebilibili.entity.User;
 import com.fakebilibili.mapper.UserMapper;
 import com.fakebilibili.service.UserService;
 import com.fakebilibili.util.ImageUtil;
+import com.fakebilibili.util.MailUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -132,6 +135,42 @@ public class UserServiceImpl implements UserService {
         user.setLastLoginin(new Date(System.currentTimeMillis()));
         int i = userDAO.insertUser(user);
         return i;
+    }
+
+    /**
+     * 根据用户邮箱发送邮件进行验证
+     * @param email
+     * @param session
+     * @return
+     * @throws MessagingException
+     */
+    @Override
+    public String getEmailCheckResp(String email,HttpSession session){
+        Random random = new Random();
+        StringBuffer buffer = new StringBuffer();
+        for(int i=0;i<4;i++){
+            buffer.append(((Integer)random.nextInt(9)).toString());
+        }
+        session.setAttribute("emailCheckCode",buffer.toString());
+        System.out.println(buffer.toString());
+        MailUtil mailUtil = new MailUtil();
+        try {
+            mailUtil.sendMail(email,"您的验证码是：   "+buffer.toString());
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return "false";
+        }
+
+        return "true";
+    }
+
+    @Override
+    public String getEmailCheckValResp(String emailCheckCode, HttpSession session) {
+        String code = (String) session.getAttribute("emailCheckCode");
+        if(code != null && code.equalsIgnoreCase(emailCheckCode)){
+            return "true";
+        }
+        return "false";
     }
 
 }

@@ -66,11 +66,11 @@
                             <input type="password" class="form-control" id="inputCheck3" placeholder="请输入验证码">
                         </div>
                         <div class="col-sm-2">
-                            <button type="submit" class="btn btn-success btn-block">获取验证码</button>
+                            <button type="button" id="getCheckCodeButton" class="btn btn-success btn-block">获取验证码</button>
                         </div>
-
                         <!--<label for="inputCheck3" class="col-sm-2 control-label" style="text-align: center;background-color: #5bc0de">x1D2</label>-->
                     </div>
+                    <label id="emailcheckcodeResp" style="color: red"></label>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
                             <div class="checkbox">
@@ -99,6 +99,38 @@
 
 <script th:inline="javascript">
     $(function () {
+        $("#getCheckCodeButton").click(function () {
+            var path = [[${#request.getContextPath()}]];
+            $.ajax({
+                url: path+"/emailcheckCode",
+                data:{"email":$("#inputemail3").val()},
+                type: "POST",
+                success: function (data) {
+                    if(data=='true'){
+                        $("#emailcheckcodeResp").text("验证码已成功发送，请注意检查邮箱");
+                    }else{
+                        $("#emailcheckcodeResp").text("");
+                    }
+                }
+            });
+        });
+
+
+        $("#inputCheck3").keyup(function () {
+            var path = [[${#request.getContextPath()}]];
+            $.ajax({
+                url: path+"/emailCheckCodeVal",
+                data:{"emailCheckCode":$("#inputCheck3").val()},
+                type: "POST",
+                success: function (data) {
+                    if(data=='true'){
+                        $("#emailcheckcodeResp").text("邮箱校验成功");
+                    }else{
+                        $("#emailcheckcodeResp").text("邮箱校验失败");
+                    }
+                }
+            });
+        });
 
         }
     );
@@ -107,5 +139,7 @@
         var path = [[${#request.getContextPath()}]];
         window.location.href=path+"/login";
     }
+
+
 </script>
 </html>

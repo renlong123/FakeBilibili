@@ -14,6 +14,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -122,5 +123,18 @@ public class UserController {
         }else{
             return "register";
         }
+    }
+
+    @RequestMapping(value = "/emailcheckCode",method = RequestMethod.POST)
+    @ResponseBody
+    public String getEmailCheckResp(@RequestParam("email") String email,HttpSession session){
+        return userService.getEmailCheckResp(email,session);
+    }
+
+
+    @RequestMapping(value = "/emailCheckCodeVal",method = RequestMethod.POST)
+    @ResponseBody
+    public String getEmailCheckValResp(@RequestParam("emailCheckCode") String emailCheckCode,HttpSession session){
+        return userService.getEmailCheckValResp(emailCheckCode,session);
     }
 }
