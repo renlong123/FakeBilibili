@@ -9,10 +9,121 @@
     <!--<link rel="icon" th：href="@{/static/img/favicon.ico}"/>-->
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
     <title>个人主页</title>
+
+    <style>
+        #userInfoTable{
+            margin-left: 15px;
+            width: 95%;
+        }
+        #userInfoTable>tbody>tr>td{
+            width: 25%;
+        }
+    </style>
 </head>
 <body>
     <div th:include="header :: header"></div>
-    个人主页
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <img th:src="@{/static/img/loginBack.jpg}" style="width: 100%;height: 120px"/>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%;height: 20px"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 style="text-align: center">个人主页</h1>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%;height: 20px"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <!--<img th:src="@{/static/img/b010.jpg}" style="width: 400px;height: 300px"/>-->
+                    <!--<img src=""/>-->
+                    <br/>
+                    <div style="text-align: center">
+                        <span th:text="${session.userInfo.name}"></span>
+                        &nbsp;&nbsp;
+                        <span th:if="${session.userInfo.sex}==0">
+                            <img src="">
+                        </span>
+                        <span th:if="${session.userInfo.sex}==1">
+                            <img src="">
+                        </span>&nbsp;&nbsp;
+                        <span><label th:text="'Level'+${session.userInfo.level}"></label></span>
+                    </div>
+                    <br/>
+                    <div style="text-align: center">
+                        <span>关注：</span>&nbsp;&nbsp;&nbsp;
+                        <span th:text="${session.userInfo.followsNumber}"></span>&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
+                        <span>粉丝：</span>&nbsp;&nbsp;&nbsp;
+                        <span th:text="${session.userInfo.fansNumber}"></span>
+                    </div>
+                </div>
+                <div class="col-md-offset-1 col-md-7">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a href="#">我的信息</a></li>
+                        <li role="presentation"><a href="#">我的视频</a></li>
+                        <li role="presentation"><a href="#">我的关注</a></li>
+                    </ul>
+                    <br/>
+                    <div class="row">
+                        <table id="userInfoTable" class="table table-striped table-bordered">
+                            <tr>
+                                <td>ID</td>
+                                <td th:text="${session.userInfo.id}"></td>
+                                <td>用户名</td>
+                                <td th:text="${session.userInfo.name}"></td>
+                            </tr>
+                            <tr>
+                                <td>性别</td>
+                                <td th:text="${session.userInfo.sex}"></td>
+                                <td>昵称</td>
+                                <td th:text="${session.userInfo.nikename}"></td>
+                            </tr>
+                            <tr>
+                                <td>等级</td>
+                                <td th:text="${session.userInfo.level}"></td>
+                                <td>邮箱</td>
+                                <td th:text="${session.userInfo.email}"></td>
+                            </tr>
+                            <tr>
+                                <td>账号创建日期</td>
+                                <td id="createTimeTd"></td>
+                                <td>上次登录日期</td>
+                                <td id="loginTimeTd"></td>
+                            </tr>
+                            <tr>
+                                <td>个性签名</td>
+                                <td th:text="${session.userInfo.description}" colspan="3"></td>
+                            </tr>
+                        </table>
+                        <button type="button" class="btn btn-success" style="margin-left: 15px">修改信息</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(function () {
+            var createTime = [[${session.userInfo.createTime}]];
+            var date = new Date(createTime);
+            var datetring1 = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            //alert(datetring);
+            $("#createTimeTd").text(datetring1.toString());
+            createTime = [[${session.userInfo.lastLoginin}]];
+            date = new Date(createTime);
+            datetring1 = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            $("#loginTimeTd").text(datetring1.toString());
+        });
+    </script>
+
     <div th:include="footer :: footer"></div>
 </body>
 </html>
