@@ -20,23 +20,20 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession();
         Cookie[] cookies = request.getCookies();
-        String username = null;
-        String password = null;
-        String usernameInSession = (String) session.getAttribute("username");
+        String userId = null;
+        String userIdInSession = (String) session.getAttribute("userId");
         if(cookies != null){
             for(Cookie cookie:cookies){
-                if(cookie.getName().equals("username")){
-                    username = cookie.getValue();
-                }else if(cookie.getName().equals("password")){
-                    password = cookie.getValue();
+                if(cookie.getName().equals("userId")){
+                    userId = cookie.getValue();
                 }
             }
         }
-        if(username!=null && username.equals(password)&&usernameInSession==null){
-            session.setAttribute("username",username);
+        if(userId!=null && userIdInSession==null){
+            session.setAttribute("userId",userId);
         }
 
-        if(usernameInSession!=null||username!=null){
+        if(userIdInSession!=null||userId!=null){
             logger.info("进入登录拦截器,已登录");
             return true;
         }

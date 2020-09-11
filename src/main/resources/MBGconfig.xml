@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+<!--   <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" /> -->
+
+  <context id="MybatisTables" targetRuntime="MyBatis3">
+    <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+        connectionURL="jdbc:mysql:///bilibili?useSSL=false&amp;serverTimezone=Asia/Shanghai"
+        userId="root"
+        password="root">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.fakebilibili.entity" targetProject=".\src\main\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="com.fakebilibili.mapper"  targetProject=".\src\main\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.fakebilibili.mapper"  targetProject=".\src\main\java">
+      <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+
+<!--    <table tableName="category_" domainObjectName="Category" >
+      <property name="useActualColumnNames" value="true"/>
+     &lt;!&ndash;  <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="number" property="myDefinedNumber" /> &ndash;&gt;
+      &lt;!&ndash; <ignoreColumn column="user_id" /> &ndash;&gt;
+      &lt;!&ndash; <columnOverride column="note" jdbcType="VARCHAR(50)" /> &ndash;&gt;
+    </table>
+    
+    <table tableName="commits_" domainObjectName="Commits" >
+      <property name="useActualColumnNames" value="true"/>
+     &lt;!&ndash;  <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="number" property="myDefinedNumber" /> &ndash;&gt;
+      &lt;!&ndash; <ignoreColumn column="user_id" /> &ndash;&gt;
+      &lt;!&ndash; <columnOverride column="note" jdbcType="VARCHAR(50)" /> &ndash;&gt;
+    </table>-->
+    <table tableName="buser_" domainObjectName="User" >
+      <property name="useActualColumnNames" value="true"/>
+      <!--  <generatedKey column="id" sqlStatement="MySql" identity="true" />
+       <columnOverride column="number" property="myDefinedNumber" /> -->
+      <!-- <ignoreColumn column="user_id" /> -->
+      <!-- <columnOverride column="note" jdbcType="VARCHAR(50)" /> -->
+    </table>
+<!--    <table tableName="video_" domainObjectName="Video" >
+      <property name="useActualColumnNames" value="true"/>
+      &lt;!&ndash;  <generatedKey column="id" sqlStatement="MySql" identity="true" />
+       <columnOverride column="number" property="myDefinedNumber" /> &ndash;&gt;
+      &lt;!&ndash; <ignoreColumn column="user_id" /> &ndash;&gt;
+      &lt;!&ndash; <columnOverride column="note" jdbcType="VARCHAR(50)" /> &ndash;&gt;
+    </table>
+    <table tableName="user_to_user" domainObjectName="UserToUser" >
+      <property name="useActualColumnNames" value="true"/>
+      &lt;!&ndash;  <generatedKey column="id" sqlStatement="MySql" identity="true" />
+       <columnOverride column="number" property="myDefinedNumber" /> &ndash;&gt;
+      &lt;!&ndash; <ignoreColumn column="user_id" /> &ndash;&gt;
+      &lt;!&ndash; <columnOverride column="note" jdbcType="VARCHAR(50)" /> &ndash;&gt;
+    </table>-->
+
+  </context>
+</generatorConfiguration>

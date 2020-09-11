@@ -83,10 +83,10 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <!--第一次必须使用request请求获取session，不然session不会产生-->
-                    <li><a th:href="@{/login}" th:if="${#request.getSession().getAttribute('username')} == null" th:text="登录"></a></li>
-                    <li><a th:href="@{/register}" th:if="${#session.getAttribute('username')} == null" th:text="注册"></a></li>
-                    <li><a th:href="@{/personIndex}" th:if="${#session.getAttribute('username')}!=null" th:text="'欢迎您,'+${#session.getAttribute('username')}"></a></li>
-                    <li><a th:if="${#session.getAttribute('username')}!=null" th:text="退出" id="exitButton"></a></li>
+                    <li><a th:href="@{/login}" th:if="${#request.getSession().getAttribute('userId')} == null" th:text="登录"></a></li>
+                    <li><a th:href="@{/register}" th:if="${#session.getAttribute('userId')} == null" th:text="注册"></a></li>
+                    <li><a th:href="@{/personIndex}" th:if="${#session.getAttribute('userId')}!=null" th:text="'欢迎您,'+${session.userInfo.name}"></a></li>
+                    <li><a th:if="${#session.getAttribute('userId')}!=null" th:text="退出" id="exitButton"></a></li>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">其他<span class="caret"></span></a>
@@ -130,8 +130,8 @@
                     /*跳转至退出页面*/
                     $("#logOutConfirm").click(function () {
                         var path = [[${#request.getContextPath()}]];
-                        var username = [[${#session.getAttribute("username")}]];
-                        window.location.href=path+"/loginOut/"+username;
+                        var userId = [[${#session.getAttribute('userId')}]];
+                        window.location.href=path+"/loginOut/"+userId;
                     });
                 }
             );

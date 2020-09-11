@@ -1,0 +1,137 @@
+package com.fakebilibili.service.serviceimpl;
+
+import com.fakebilibili.dao.UserDAO;
+import com.fakebilibili.dao.daoimpl.UserDAOImpl;
+import com.fakebilibili.entity.User;
+import com.fakebilibili.mapper.UserMapper;
+import com.fakebilibili.service.UserService;
+import com.fakebilibili.util.ImageUtil;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.sql.Date;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private UserDAO userDAO;
+
+    /**
+     * 处理用户登录请求及进入登录页面请求，
+     * @param request
+     * @param username
+     * @param password
+     * @param remenberMe
+     * @param response
+     * @return
+     */
+    @Override
+    public String userLogin(HttpServletRequest request, String username, String password, String remenberMe, HttpServletResponse response) {
+
+        HttpSession session = request.getSession();
+
+        if(username == null || password == null){
+            return "login";
+        }else if("".equals(username)){
+            request.setAttribute("loginErrorTips", "用户名不存在");
+            return "login";
+        }
+        else if(session.getAttribute("username") != null){/*session中有用户时直接跳转*/
+            return "redirect:/personIndex";
+        } else {
+            User user = userDAO.selectUserByName(username);
+            if(user == null){
+                request.setAttribute("loginErrorTips", "用户不存在");
+                return "login";
+            }else if (password.equals(user.getPassword())) {
+                session.setAttribute("userId", user.getId().toString());
+                session.setAttribute("userInfo",user);
+                /*开启免登录后记录用户id至cookie*/
+                if ("on".equals(remenberMe)) {
+                    Cookie userIdCookie = new Cookie("userId", user.getId().toString());
+                    userIdCookie.setMaxAge(60 * 60 * 24);
+                    userIdCookie.setPath(request.getContextPath());
+                    response.addCookie(userIdCookie);
+                }
+                return "redirect:/personIndex";
+            } else {
+                request.setAttribute("loginErrorTips", "密码错误");
+                return "login";
+            }
+        }
+    }
+
+    @Override
+    public void getCheckCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //设置不缓存图片
+        System.out.println("new image");
+        response.setHeader("Pragma","No-cache");
+        response.setHeader("Cache-Control","No-cache");
+        response.setDateHeader("Expires",0);
+        //指定生成的响应图片
+        response.setContentType("image/jpeg");
+        Object[] objects = ImageUtil.createImage();
+        BufferedImage image = (BufferedImage) objects[1];
+        HttpSession session = request.getSession(true);
+        //存储验证码数据到Session中
+        session.setAttribute("IdentifyCode",objects[0]);
+        System.out.println(session.getAttribute("IdentifyCode"));
+        //image.dispose();
+        //将图形验证码IO流传输至前端
+        ImageIO.write(image,"JPEG",response.getOutputStream());
+    }
+
+    /**
+     * 删除session中的用户及cookie中的用户
+     * @param userId
+     * @param request
+     * @param response
+     * @return
+     */
+    @Override
+    public String userLoginOut(String userId, HttpServletRequest request, HttpServletResponse response) {
+        if(userId!=null && userId.equals(request.getSession().getAttribute("userId"))){
+            request.getSession().removeAttribute("userId");
+            Cookie[] cookies = request.getCookies();
+            for(int i=0;i<cookies.length;i++){
+                if(cookies[i].getName().equals("userId")&&cookies[i].getValue().equals(userId)){
+                    cookies[i].setMaxAge(0);
+                    cookies[i].setPath(request.getContextPath());
+                    response.addCookie(cookies[i]);
+                }
+            }
+        }
+        return "redirect:/hello";
+    }
+
+    @Override
+    public int insertUserSelective(User user){
+        if(user.getId()!=null || userDAO.selectUserByName(user.getName())!=null){
+            return 0;
+        }
+        if(user.getLevel()==null){
+            user.setLevel(0);
+        }
+        if(user.getFansNumber()==null){
+            user.setFansNumber(0);
+        }
+        if(user.getFollowsNumber()==null){
+            user.setFollowsNumber(0);
+        }
+        user.setCreateTime(new Date(System.currentTimeMillis()));
+        user.setLastLoginin(new Date(System.currentTimeMillis()));
+        int i = userDAO.insertUser(user);
+        return i;
+    }
+
+}

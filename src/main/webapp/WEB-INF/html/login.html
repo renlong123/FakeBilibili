@@ -62,6 +62,7 @@
 
                         <label id="tipsLabel" th:text="${#request.getAttribute('loginErrorTips')} == null ? '':${#request.getAttribute('loginErrorTips')}"
                                style="margin-left: 80px;color: red"></label>
+                        <label id="checkcodeLabel" style="color: red"></label>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <div class="checkbox">
@@ -93,6 +94,7 @@
         $.ajaxSetup({
             cache: false
         });
+        /*验证码刷新*/
         $("#checkCodeImg").click(function () {
             var path = [[${#request.getContextPath()}]];
             var pathfull = path+"/login/refreshCheckCode?time="+new Date().getTime();
@@ -100,18 +102,25 @@
             $("#checkCodeImg").attr("src",pathfull);
             $("#tipsLabel").attr("value","");
         });
-        $("#inputCheck3").blur(function () {
-            var checkCode = [[${session.IdentifyCode}]];
-            if($("#inputCheck3").val().toLowerCase() != checkCode.toString().toLowerCase()){
-                $("#tipsLabel").attr("value","验证码错误");
-            }else{
-                alert(1);
-                $("#tipsLabel").attr("value","");
-            }
+        /*校验验证码*/
+        $("#inputCheck3").keyup(function () {
+            var path = [[${#request.getContextPath()}]];
+            $.ajax({
+                url: path+"/checkIdentifyCode",
+                data:{"checkCode":$("#inputCheck3").val()},
+                type: "POST",
+                success: function (data) {
+                    if(data=='true'){
+                        $("#checkcodeLabel").text("");
+                    }else{
+                        $("#checkcodeLabel").text("验证码错误");
+                    }
+                }
+            });
         });
         }
     );
-
+    /*跳转至注册界面*/
     function registerButtonActive() {
         var path = [[${#request.getContextPath()}]];
         window.location.href=path+"/register";

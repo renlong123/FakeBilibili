@@ -21,7 +21,7 @@
     <!--<mvc:annotation-driven/>标签主要是用来帮助我们处理请求映射，决定是哪个controller的哪个方法来
     处理当前请求，以及异常处理,这个标签其实是可以省略不写的-->
     <mvc:default-servlet-handler/>
-    <mvc:annotation-driven/>
+    <mvc:annotation-driven validator="validator"/>
  <!--   <mvc:resources mapping="/static/img/**" location="/static/img/"></mvc:resources>-->
     <!--默认界面时需要跳转到这里来，经过模板引擎渲染，不然没有效果-->
     <mvc:view-controller path="/" view-name="forward:/hello"/>
@@ -76,5 +76,21 @@
         <property name="defaultStatusCode" value="500"></property>
     </bean>
     <!-- 全局异常配置 end -->
+
+    <!--数据校验-->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"></property>
+        <property name="validationMessageSource" ref="validationMessageSource"></property>
+    </bean>
+
+    <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:CustomValidationMessages</value>
+            </list>
+        </property>
+        <property name="fileEncodings" value="utf-8" />
+        <property name="cacheSeconds" value="120" />
+    </bean>
 
 </beans>

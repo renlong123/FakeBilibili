@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
     <!--扫描注入service层bean-->
-    <context:component-scan base-package="com.fakebilibili.service"></context:component-scan>
+    <context:component-scan base-package="com.fakebilibili"></context:component-scan>
 
     <!--placerholer可以读取配置文件，单独进行配置，注意placerholer默认只能定义一次，多余的spring会自动忽略。
     只需要在context:property-placeholder标签中添加一个属性ignore-unresolvable="true"即可-->
