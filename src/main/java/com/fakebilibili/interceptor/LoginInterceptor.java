@@ -1,8 +1,14 @@
 package com.fakebilibili.interceptor;
 
 import com.fakebilibili.controller.ErrorController;
+import com.fakebilibili.dao.UserDAO;
+import com.fakebilibili.dao.daoimpl.UserDAOImpl;
+import com.fakebilibili.entity.User;
+import com.fakebilibili.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,7 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private UserService service;
 
     Logger logger = LogManager.getLogger(LoginInterceptor.class);
 
@@ -31,6 +41,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         if(userId!=null && userIdInSession==null){
             session.setAttribute("userId",userId);
+            service.putUserInfoToSession(session);
         }
 
         if(userIdInSession!=null||userId!=null){

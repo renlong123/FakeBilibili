@@ -173,4 +173,21 @@ public class UserServiceImpl implements UserService {
         return "false";
     }
 
+    @Override
+    public String putUserInfoToSession(HttpSession session) {
+        int userId = Integer.parseInt(String.valueOf(session.getAttribute("userId")));
+        User user = userDAO.selectUserById(userId);
+        session.setAttribute("userInfo",user);
+        System.out.println(user);
+        return "true";
+    }
+
+    @Override
+    public int updateUserOptional(User user, HttpSession session) {
+        int result = userDAO.modifyUser(user);
+        if(result >= 1){
+            putUserInfoToSession(session);
+        }
+        return result;
+    }
 }

@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
@@ -22,6 +23,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * 处理对用户进行操作的请求
@@ -136,5 +140,54 @@ public class UserController {
     @ResponseBody
     public String getEmailCheckValResp(@RequestParam("emailCheckCode") String emailCheckCode,HttpSession session){
         return userService.getEmailCheckValResp(emailCheckCode,session);
+    }
+
+
+    @RequestMapping(value = "/putUserInfo",method = RequestMethod.POST)
+    public String putUserInfoToSession(HttpSession session){
+        userService.putUserInfoToSession(session);
+        return "true";
+    }
+
+
+    @RequestMapping(value = "/userInfoChange/{id}",method = RequestMethod.POST)
+    public String jumpToUserUpdate(@PathVariable(value = "id",required = false)Integer id){
+        return "userInfoUpdate";
+    }
+
+
+    @RequestMapping(value = "/updateUserOptional",method = RequestMethod.POST)
+    public String updateUserOptional(User user,HttpSession session,HttpServletResponse response) throws IOException {
+        //System.out.println(user);
+        Date lastLoginin = user.getLastLoginin();
+        user.setLastLoginin(new java.sql.Date(lastLoginin.getTime()));
+        int result = userService.updateUserOptional(user,session);
+        if(result >=1 ){
+            return "personIndex";
+        }else{
+            //response.getWriter().write("修改失败了！");
+            return "userInfoUpdate";
+        }
+    }
+
+
+    @RequestMapping(value = "/changeHeadPic",method = RequestMethod.POST)
+    public String changeUserHeadPic(@RequestParam(required = true)MultipartFile headPic,HttpSession session) throws IOException {
+
+        if(headPic != null){
+            String headPicPath = "D:\\gitRespository\\FakeBilibili\\uploadFiles\\";
+
+            String orignalPicName = headPic.getOriginalFilename();
+            User user = (User) session.getAttribute("userInfo");
+            String userId = user.getId().toString();
+            String newFileName = orignalPicName.substring(0,3) + userId + ".jpg";
+            File file  = new File(headPicPath + newFileName);
+            String mapPath = "/upload/"+newFileName;
+            headPic.transferTo(file);
+            user.setHeadPic(mapPath);
+            userService.updateUserOptional(user,session);
+        }
+
+        return "personIndex";
     }
 }

@@ -25,4 +25,8 @@ public interface UserService {
     public String getEmailCheckResp(String email,HttpSession session);
 
     public String getEmailCheckValResp(String emailCheckCode,HttpSession session);
+
+    public String putUserInfoToSession(HttpSession session);
+
+    public int updateUserOptional(User user,HttpSession session);
 }

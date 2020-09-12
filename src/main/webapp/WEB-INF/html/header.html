@@ -85,7 +85,7 @@
                     <!--第一次必须使用request请求获取session，不然session不会产生-->
                     <li><a th:href="@{/login}" th:if="${#request.getSession().getAttribute('userId')} == null" th:text="登录"></a></li>
                     <li><a th:href="@{/register}" th:if="${#session.getAttribute('userId')} == null" th:text="注册"></a></li>
-                    <li><a th:href="@{/personIndex}" th:if="${#session.getAttribute('userId')}!=null" th:text="'欢迎您,'+${session.userInfo.name}"></a></li>
+                    <li><a th:href="@{/personIndex}" th:if="${#session.getAttribute('userId')}!=null" id="usernameLabel" th:text="'欢迎，'+${session.userInfo.name}"></a></li>
                     <li><a th:if="${#session.getAttribute('userId')}!=null" th:text="退出" id="exitButton"></a></li>
 
                     <li class="dropdown">
