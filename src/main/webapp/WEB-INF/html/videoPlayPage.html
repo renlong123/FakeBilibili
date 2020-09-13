@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base href="${#request.getContextPath()+'/'}"/>
+    <link rel="stylesheet"  th:href="@{/static/bootstrap/css/bootstrap.css }"/>
+    <script type="text/javascript"  th:src="@{/static/bootstrap/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
+    <!--<link rel="icon" th：href="@{/static/img/favicon.ico}"/>-->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+    <title>个人信息修改</title>
+    <style>
+        #videoTitle{
+            font-size: 40px;
+        }
+
+        .imgInDiv1{
+            width: 800px;
+            height: 450px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="header :: header"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div>
+                <label th:text="${videoInfo.name}" id="videoTitle"></label>
+            </div>
+            <div th:text="${videoInfo.playTimes}+' 次播放&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+${#dates.format(videoInfo.publishedTime,'yyyy-MM-dd')}">
+                <!--+${${#dates.format(videoInfo.publishedTime,'yyyy-MM-dd')}}-->
+            </div>
+            <div style="width: 100%;height: 10px"></div>
+            <div>
+                <video th:src="${videoInfo.vedioAddr}" controls="controls" class="imgInDiv1" >
+                </video>
+            </div>
+            <div style="width: 100%;height: 10px"></div>
+            <div>
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                &nbsp;<span th:text="${videoInfo.likeNumber}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                &nbsp;<span th:text="${videoInfo.dislikeNumber}"></span>
+            </div>
+            <div style="width: 100%;height: 10px"></div>
+            <div>
+                <div>简介</div>
+                <div th:text="${videoInfo.description}"></div>
+            </div>
+            <div style="width: 100%;height: 20px"></div>
+            <div>
+                <span class="label label-success" th:if="${categoryInfo}!=null" th:text="${categoryInfo.name}"></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-sm-3">
+                    <img th:src="${userInfo.headPic}" style="width: 60px;height: 60px">
+                </div>
+                <div class="col-sm-9">
+                    <span th:text="${userInfo.name}" style="font-size: 18px;font-weight: bold">
+                    </span>
+                    <br/>
+                    <span th:text="${userInfo.description}"></span>
+                    <br/>
+                </div>
+            </div>
+            <br/>
+            <div>
+                <button class="btn btn-success btn-sm btn-block" >关注</button>
+            </div>
+            <br/>
+            <div>
+                其他
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="footer :: footer"></div>
+
+</body>
+</html>

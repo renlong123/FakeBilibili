@@ -56,11 +56,20 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="progressbarStatus" class="col-sm-2 control-label">上传进度</label>
+                    <div class="progress col-sm-10">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" id="progressbarStatus"
+                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <!--<div class="col-sm-offset-2 col-sm-4">
                         <button type="button" class="btn btn-success btn-block" onclick="loginButtonActive()">登录</button>
                     </div>-->
                     <div class="col-sm-offset-2 col-sm-4">
-                        <button type="submit" class="btn btn-warning btn-block">上传</button>
+                        <button type="submit" class="btn btn-warning btn-block" id="uploadFileButton">上传</button>
                     </div>
                 </div>
             </form>
@@ -165,8 +174,37 @@
                 }
             });
         });
+
+        $("#uploadFileButton").click(function () {
+            $("#progressbarStatus").width("0%");
+            $(this).attr("disabled",true);
+            //$("#progressBar").parent().addClass("active");
+            /*$('body').everyTime('1s','A',function(){
+                getProgressBar();
+            });*/
+            var interval;
+            interval = setInterval(getProgressBar,"1000");
+        });
     });
 
+    function getProgressBar() {
+        var path = [[${#request.getContextPath()}]];
+        $.ajax({
+            url:path+"/getProgress",
+            data:{},
+            type:"get",
+            dataType: "json",
+            success:function (data) {
+                console.log(data);
+                if(data!=""){
+                    $("#progressbarStatus").width(data+"%");
+                    /*if(data>=99){
+                        $('body').stopTime ('A');
+                    }*/
+                }
+            }
+        });
+    }
 </script>
 
 <div th:include="footer :: footer"></div>

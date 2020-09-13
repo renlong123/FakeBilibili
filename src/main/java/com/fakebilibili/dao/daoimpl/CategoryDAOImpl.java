@@ -28,7 +28,8 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     @Override
     public Category getCategoryById(Integer id) {
-        return null;
+        Category category = categoryMapper.selectByPrimaryKey(id);
+        return category;
     }
 
     @Override

@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
             buffer.append(((Integer)random.nextInt(9)).toString());
         }
         session.setAttribute("emailCheckCode",buffer.toString());
-        System.out.println(buffer.toString());
+        //System.out.println(buffer.toString());
         MailUtil mailUtil = new MailUtil();
         try {
             mailUtil.sendMail(email,"您的验证码是：   "+buffer.toString());
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
         int userId = Integer.parseInt(String.valueOf(session.getAttribute("userId")));
         User user = userDAO.selectUserById(userId);
         session.setAttribute("userInfo",user);
-        System.out.println(user);
+        //System.out.println(user);
         return "true";
     }
 

@@ -3,6 +3,7 @@ package com.fakebilibili.dao;
 import com.fakebilibili.entity.Video;
 
 import java.util.List;
+import java.util.Map;
 
 public interface VideoDAO {
 

@@ -1,14 +1,20 @@
 package com.fakebilibili.service.serviceimpl;
 
+import com.fakebilibili.dao.CategoryDAO;
+import com.fakebilibili.dao.UserDAO;
 import com.fakebilibili.dao.VideoDAO;
+import com.fakebilibili.entity.Category;
+import com.fakebilibili.entity.User;
 import com.fakebilibili.entity.Video;
 import com.fakebilibili.service.VideoService;
+import com.fakebilibili.util.Progress;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -22,6 +28,11 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private VideoDAO videoDAO;
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private CategoryDAO categoryDAO;
+
 
 
     @Override
@@ -34,6 +45,7 @@ public class VideoServiceImpl implements VideoService {
             return 0;
         }else{
             String userId = session.getAttribute("userId").toString();
+
             Video video = new Video();
             video.setName(name);
             video.setDescription(description);
@@ -57,6 +69,7 @@ public class VideoServiceImpl implements VideoService {
                     String newFileName = concatNewName(orignalPicName,userId);
                     File file = new File(absolutePath+"video\\"+newFileName);
                     String videoAddr = "/upload/video/"+newFileName;
+
                     uploadVideoInfo[1].transferTo(file);
                     video.setVedioAddr(videoAddr);
                 }
@@ -96,8 +109,37 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public int deleteVideoById(Integer id) {
+        Video video = videoDAO.getOneVideoById(id);
+        String absolutePath = "D:\\gitRespository\\FakeBilibili\\uploadFiles\\";
+        String path = video.getVedioCoverPic();
+        /*得到服务器上的文件*/
+        File file = new File(absolutePath+path.substring(8));
+        file.delete();
+        path = video.getVedioAddr();
+        file = new File(absolutePath+"video\\"+path.substring(8));
+        file.delete();
+
         int i = videoDAO.deleteVideoById(id);
         return i;
+    }
+
+    /**
+     * 获取视频信息及相关的user、category、contents信息
+     * @param id
+     * @param model
+     * @return
+     */
+    @Override
+    public String getVideoAndOtherInfo(Integer id, Model model) {
+        Video oneVideoById = videoDAO.getOneVideoById(id);
+        User user = userDAO.selectUserById(oneVideoById.getAuthorid());
+        Category categoryById = categoryDAO.getCategoryById(oneVideoById.getCategoryId());
+        model.addAttribute("videoInfo",oneVideoById);
+        model.addAttribute("userInfo",user);
+        model.addAttribute("categoryInfo",categoryById);
+        System.out.println(categoryById);
+        System.out.println(user);
+        return null;
     }
 
 

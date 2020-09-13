@@ -1,6 +1,8 @@
 package com.fakebilibili.service;
 
 import com.fakebilibili.entity.Video;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,4 +21,6 @@ public interface VideoService {
     public String getOneVideoById(Integer id);
 
     public int deleteVideoById(Integer id);
+
+    public String getVideoAndOtherInfo(Integer id, Model model);
 }

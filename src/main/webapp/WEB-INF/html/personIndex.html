@@ -114,12 +114,12 @@
                     </div>
 
                     <div class="row" id="myVideoUpload">
-                        <div id="noVideoTips">还没有传过视频！</div>
+                        <div id="noVideoTips" style="margin-left: 15px">还没有传过视频！</div>
                         <div id="videoContent" style="margin-left: 15px;width: 96%">
 
                         </div>
                         <!--分页-->
-                        <div style="text-align: center;">
+                        <div style="text-align: center;" id="pageDivide">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination">
                                     <li>
@@ -127,11 +127,11 @@
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
-                                    <li><a href="#">1</a></li>
+                                    <!--<li><a href="#">1</a></li>
                                     <li><a href="#">2</a></li>
                                     <li><a href="#">3</a></li>
                                     <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">5</a></li>-->
                                     <li>
                                         <a href="#" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
@@ -254,7 +254,8 @@
                         "<div class=\"col-sm-2\">"+item.name+"</div>" +
                         "<div class=\"col-sm-8\">"+"<img src='"+item.vedioCoverPic+"' style='width: 300px;height: 100px'></img>"+"</div>" +
                         "<div class=\"col-sm-2\">"+
-                        "<button type=\"button\" class=\"btn btn-danger btn-sm updateVideo\" id='buttonUpdate"+item.id+"'>修改</button><br/>"+
+                        "<button type=\"button\" class=\"btn btn-success btn-sm updateVideo\" id='buttonVideoPlay"+item.id+"'>播放</button><br/><br/>"+
+                        "<button type=\"button\" class=\"btn btn-info btn-sm updateVideo\" id='buttonUpdate"+item.id+"'>修改</button><br/><br/>"+
                         "<button type=\"button\" class=\"btn btn-danger btn-sm deleteVideo\" id='buttonDelete"+item.id+"'>删除</button>"+
                         "</div>"+
                         "</div>");
@@ -266,11 +267,16 @@
                             deleteVideoById(item.id);
                         });
                     });
+                    $("#buttonVideoPlay"+item.id).click(function () {
+                        window.location.href=[[${#request.getContextPath()}]]+"/playVideoPage/"+item.id;
+                    });
                     // $("button.updateVideo").click(function () {
                     //     var id = $(this).parent().attr("id");
                     // });
                 });
 
+            }else{
+                $("#pageDivide").hide();
             }
         }
 
@@ -281,7 +287,7 @@
                 url: path,
                 type: "DELETE",
                 success: function(data){
-                    if(result=="true"){
+                    if(data=="true"){
                         //alert("删除成功");
                         window.location.href=[[${#request.getContextPath()}]]+"/personIndex";
                     }

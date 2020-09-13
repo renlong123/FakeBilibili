@@ -178,6 +178,11 @@ public class UserController {
 
             String orignalPicName = headPic.getOriginalFilename();
             User user = (User) session.getAttribute("userInfo");
+            String userHeadPic = user.getHeadPic();
+            if(userHeadPic!=null){
+                File file  = new File(headPicPath + userHeadPic.substring(8));
+                file.delete();
+            }
             String userId = user.getId().toString();
             String newFileName = orignalPicName.substring(0,3) + userId + ".jpg";
             File file  = new File(headPicPath + newFileName);

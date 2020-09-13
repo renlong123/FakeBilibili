@@ -14,5 +14,4 @@ public interface UserDAO {
     public int deleteUserById(Integer id);
 
     public User selectUserByName(String username);
-
 }

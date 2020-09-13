@@ -93,7 +93,7 @@
         <property name="cacheSeconds" value="120" />
     </bean>
 
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <bean id="multipartResolver" class="com.fakebilibili.listener.CustomMultiResolver">
         <property name="maxUploadSize">
             <value>52428000000</value>
         </property>
