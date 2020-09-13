@@ -31,17 +31,18 @@
             </div>
         </div>
         <div style="width: 100%;height: 20px"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 style="text-align: center">个人主页</h1>
-                </div>
-            </div>
-        </div>
+
         <div style="width: 100%;height: 20px"></div>
         <div class="container">
             <div class="row">
+
                 <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 style="text-align: center">个人主页</h1>
+                        </div>
+                    </div>
+                    <div style="width: 100%;height: 20px"></div>
                     <!--<img th:src="@{/static/img/b010.jpg}" style="width: 400px;height: 300px"/>-->
                     <!--<img src=""/>-->
                     <div style="text-align: center">
@@ -70,10 +71,10 @@
                     </div>
                 </div>
                 <div class="col-md-offset-1 col-md-7">
-                    <ul class="nav nav-tabs">
-                        <li role="presentation" class="active"><a href="#">我的信息</a></li>
-                        <li role="presentation"><a href="#">我的视频</a></li>
-                        <li role="presentation"><a href="#">我的关注</a></li>
+                    <ul class="nav nav-pills nav-justified">
+                        <li role="presentation" class="active" id="myInfoLi"><a onclick="changeToMyInfo()">我的信息</a></li>
+                        <li role="presentation" id="myVideoLi"><a onclick="changeToMyVideo()">我的视频</a></li>
+                        <li role="presentation" id="myFollowsLi"><a onclick="changeToMyFollows()">我的关注</a></li>
                     </ul>
                     <br/>
                     <div class="row" id="myUserInfo">
@@ -113,15 +114,32 @@
                     </div>
 
                     <div class="row" id="myVideoUpload">
-                        <!--<table id="userVideoTable" class="table">
-                            <tr th:each="video,videoStat : ${userVideoList}">
-                                <td th:text="${video.description}"></td>
-                                <td >
-                                    <div style="background: '@{video.vedioCoverPic}'"></div>
-                                </td>
-                            </tr>
+                        <div id="noVideoTips">还没有传过视频！</div>
+                        <div id="videoContent" style="margin-left: 15px;width: 96%">
 
-                        </table>-->
+                        </div>
+                        <!--分页-->
+                        <div style="text-align: center;">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                         <form th:action="@{'/videoUploadPage/'+${session.userInfo.id}}" method="get">
                             <button type="submit"class="btn btn-success" style="margin-left: 15px">上传视频</button>
                         </form>
@@ -160,9 +178,36 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <div class="modal fade" tabindex="-1" role="dialog" id="deleteVideoModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">删除该视频？</h4>
+                </div>
+                <div class="modal-body">
+                    <p>确定要删除吗？删除后不可恢复！</p>
+                    <div class="form-group">
+                        <input type="hidden" id="deleteVideoId">
+                        <label for="exampleInputFile">名称</label>
+                        <input type="text" id="deleteVideoInput">
+                        <label for="exampleInputFile">封面</label>
+                        <img  id="deleteVideoCover" style="width: 200px;width: 100px">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">手滑了</button>
+                    <button type="button" class="btn btn-primary" id="deletVideoConfirm">是的，我要删除</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 
     <script th:inline="javascript">
         $(function () {
+            changeToMyInfo();
+
             var createTime = [[${session.userInfo.createTime}]];
             var date = new Date(createTime);
             var datetring1 = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
@@ -178,7 +223,136 @@
             $("#userHeadPicImg").click(function () {
                 $('#userHeadPicModal').modal('show');
             });
+            getVideoInfoByPage(1);
         });
+
+        function getVideoInfoByPage(page) {
+
+            /*进入后请求视频*/
+            var path = [[${#request.getContextPath()}]]+"/getVideoInfo/"+[[${#session.getAttribute('userId')}]];
+            //alert(path);
+            $.ajax({
+                url: path,
+                data: {
+                    page: page,
+                    pageSize: 3
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(pageInfo){
+                    putVideoInfoInDiv(pageInfo);
+                }
+            });
+        }
+
+        function putVideoInfoInDiv(pageInfo){
+           // alert(pageInfo.toString());
+            if(pageInfo.size > 0){
+                $("#noVideoTips").hide();
+                $.each(pageInfo.list,function(i,item){
+                    $("#videoContent").append("<div class='row' id='"+item.id+"'>" +
+                        "<div class=\"col-sm-2\">"+item.name+"</div>" +
+                        "<div class=\"col-sm-8\">"+"<img src='"+item.vedioCoverPic+"' style='width: 300px;height: 100px'></img>"+"</div>" +
+                        "<div class=\"col-sm-2\">"+
+                        "<button type=\"button\" class=\"btn btn-danger btn-sm updateVideo\" id='buttonUpdate"+item.id+"'>修改</button><br/>"+
+                        "<button type=\"button\" class=\"btn btn-danger btn-sm deleteVideo\" id='buttonDelete"+item.id+"'>删除</button>"+
+                        "</div>"+
+                        "</div>");
+                    /*点击删除按钮后动作，打开模态框确认*/
+                    $("#buttonDelete"+item.id).click(function () {
+                        getOneVideoById(item.id);
+                        $('#deleteVideoModal').modal('show');
+                        $('#deletVideoConfirm').click(function () {
+                            deleteVideoById(item.id);
+                        });
+                    });
+                    // $("button.updateVideo").click(function () {
+                    //     var id = $(this).parent().attr("id");
+                    // });
+                });
+
+            }
+        }
+
+        /*删除掉一条视频信息*/
+        function deleteVideoById(id){
+            var path = [[${#request.getContextPath()}]]+"/deleteOneVideoInfo/"+id;
+            $.ajax({
+                url: path,
+                type: "DELETE",
+                success: function(data){
+                    if(result=="true"){
+                        //alert("删除成功");
+                        window.location.href=[[${#request.getContextPath()}]]+"/personIndex";
+                    }
+                    else{
+                        alert("删除失败");
+                    }
+                }
+            });
+        }
+
+        /*请求一条视频信息用于显示*/
+        function getOneVideoById(id){
+            var path = [[${#request.getContextPath()}]]+"/getOneVideoInfo/"+id;
+            alert(id);
+            //alert(path);
+            $.ajax({
+                url: path,
+                type: "GET",
+                dataType: "json",
+                success: function(data){
+                    $("#deleteVideoId").attr("value",id);
+                    $("#deleteVideoInput").attr("value",data.name);
+                    $("#deleteVideoCover").attr("src",data.vedioCoverPic);
+                    alert(data.vedioCoverPic);
+                }
+            });
+        }
+
+        /*删除视频*/
+        function deleteVideo(videoId){
+            var path = [[${#request.getContextPath()}]]+"/deleteVideo/"+videoId;
+            $.ajax({
+                url: path,
+                type: "DELETE",
+                success: function(result){
+                    if(result=="true"){
+                        alert("删除成功");
+                    }
+                    else{
+                        alert("删除失败");
+                    }
+                }
+            });
+        }
+
+        function changeToMyInfo() {
+            $("#myUserInfo").show();
+            $("#myVideoUpload").hide();
+            $("#myFollowsUser").hide();
+            $("#myInfoLi").addClass("active");
+            $("#myVideoLi").removeClass("active");
+            $("#myFollowsLi").removeClass("active");
+        }
+
+        function changeToMyVideo() {
+            $("#myUserInfo").hide();
+            $("#myVideoUpload").show();
+            $("#myFollowsUser").hide();
+            $("#myInfoLi").removeClass("active");
+            $("#myVideoLi").addClass("active");
+            $("#myFollowsLi").removeClass("active");
+        }
+
+        function changeToMyFollows() {
+            $("#myUserInfo").hide();
+            $("#myVideoUpload").hide();
+            $("#myFollowsUser").show();
+            $("#myInfoLi").removeClass("active");
+            $("#myVideoLi").removeClass("active");
+            $("#myFollowsLi").addClass("active");
+        }
     </script>
 
     <div th:include="footer :: footer"></div>

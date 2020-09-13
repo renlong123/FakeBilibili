@@ -170,7 +170,6 @@ public class UserController {
         }
     }
 
-
     @RequestMapping(value = "/changeHeadPic",method = RequestMethod.POST)
     public String changeUserHeadPic(@RequestParam(required = true)MultipartFile headPic,HttpSession session) throws IOException {
 

@@ -23,4 +23,19 @@ public class CategorySeviceImpl implements CategoryService {
         List<Category> categories = categoryDAO.getCategories();
         return categories;
     }
+
+    @Override
+    public int insertIntoCategoryFunction(String name, String description) {
+        Category category = new Category();
+        category.setName(name);
+        category.setDescription(description);
+        int insertCategory = categoryDAO.insertCategory(category);
+        return insertCategory;
+    }
+
+    @Override
+    public List<Category> selectAllCategory() {
+        List<Category> categories = categoryDAO.getCategories();
+        return categories;
+    }
 }

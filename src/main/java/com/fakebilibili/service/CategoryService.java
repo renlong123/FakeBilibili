@@ -8,4 +8,8 @@ public interface CategoryService {
 
     public List<Category> insertCategoryAndReturn(String name, String description);
 
+    public int insertIntoCategoryFunction(String name, String description);
+
+    public List<Category> selectAllCategory();
+
 }
