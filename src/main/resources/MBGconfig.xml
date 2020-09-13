@@ -45,7 +45,7 @@
       &lt;!&ndash; <ignoreColumn column="user_id" /> &ndash;&gt;
       &lt;!&ndash; <columnOverride column="note" jdbcType="VARCHAR(50)" /> &ndash;&gt;
     </table>-->
-    <table tableName="buser_" domainObjectName="User" >
+    <table tableName="video_" domainObjectName="Video" >
       <property name="useActualColumnNames" value="true"/>
       <!--  <generatedKey column="id" sqlStatement="MySql" identity="true" />
        <columnOverride column="number" property="myDefinedNumber" /> -->
