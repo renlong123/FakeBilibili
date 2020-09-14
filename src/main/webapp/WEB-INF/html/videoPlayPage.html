@@ -54,6 +54,36 @@
             <div>
                 <span class="label label-success" th:if="${categoryInfo}!=null" th:text="${categoryInfo.name}"></span>
             </div>
+
+            <div>
+                <span class="label label-warning">评论区</span>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <img th:src="${userInfo.headPic}" style="width: 60px;height: 60px">
+                    </div>
+                    <div class="col-sm-8">
+                        <!-- 加载编辑器的容器 -->
+                        <script id="container" name="content" type="text/plain">
+
+                        </script>
+                        <!-- 配置文件 -->
+                        <script type="text/javascript" th:src="@{/static/ueditor/ueditor.config.js}"></script>
+                        <!-- 编辑器源码文件 -->
+                        <script type="text/javascript" th:src="@{/static/ueditor/ueditor.all.min.js}"></script>
+                        <script type="text/javascript"  th:src="@{/static/ueditor/lang/zh-cn/zh-cn.js}"></script>
+                        <!-- 实例化编辑器 -->
+                        <script type="text/javascript">
+                            var ue = UE.getEditor('container');
+                        </script>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" id="submitButton" class="btn btn-success"></button>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="col-md-3">
             <div class="row">
@@ -79,6 +109,15 @@
         </div>
     </div>
 </div>
+
+<script th:inline="javascript">
+    $("#submitButton").click(function () {
+        var contents = UE.getEditor('container').getContent();
+        $.ajax({
+            url:
+        });
+    });
+</script>
 
 <div th:include="footer :: footer"></div>
 
