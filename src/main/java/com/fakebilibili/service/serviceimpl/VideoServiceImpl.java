@@ -142,6 +142,14 @@ public class VideoServiceImpl implements VideoService {
         return null;
     }
 
+    @Override
+    public String getVideoInfo(Integer authorid, Integer id) {
+        List<Video> videos = videoDAO.getVideosInfoExceptsId(authorid, id);
+        Gson gson = new Gson();
+        String json = gson.toJson(videos);
+        return json;
+    }
+
 
     /**
      下边这个是好方法，希望各位能用起来，虽然是个小方法，但我其实真不舍得贴出来，是JAVA自带的方法

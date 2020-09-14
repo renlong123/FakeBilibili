@@ -23,4 +23,6 @@ public interface VideoService {
     public int deleteVideoById(Integer id);
 
     public String getVideoAndOtherInfo(Integer id, Model model);
+
+    public String getVideoInfo(Integer authorid,Integer id);
 }

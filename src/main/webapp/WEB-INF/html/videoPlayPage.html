@@ -41,8 +41,10 @@
             <div style="width: 100%;height: 10px"></div>
             <div>
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                点赞
                 &nbsp;<span th:text="${videoInfo.likeNumber}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                点踩
                 &nbsp;<span th:text="${videoInfo.dislikeNumber}"></span>
             </div>
             <div style="width: 100%;height: 10px"></div>
@@ -54,16 +56,17 @@
             <div>
                 <span class="label label-success" th:if="${categoryInfo}!=null" th:text="${categoryInfo.name}"></span>
             </div>
-
+            <div style="width: 100%;height: 20px"></div>
             <div>
                 <span class="label label-warning">评论区</span>
             </div>
+            <div style="width: 100%;height: 8px"></div>
             <div>
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-1">
                         <img th:src="${userInfo.headPic}" style="width: 60px;height: 60px">
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-9">
                         <!-- 加载编辑器的容器 -->
                         <script id="container" name="content" type="text/plain">
 
@@ -79,11 +82,13 @@
                         </script>
                     </div>
                     <div class="col-sm-1">
-                        <button type="button" id="submitButton" class="btn btn-success"></button>
+                        <button type="button" id="submitButton" class="btn btn-success">评论</button>
                     </div>
                 </div>
             </div>
-
+            <h5 class="page-header"></h5>
+            <div id="commitsFather">
+            </div>
         </div>
         <div class="col-md-3">
             <div class="row">
@@ -103,7 +108,7 @@
                 <button class="btn btn-success btn-sm btn-block" >关注</button>
             </div>
             <br/>
-            <div>
+            <div id="otherVideoOfUser">
                 其他
             </div>
         </div>
@@ -111,12 +116,109 @@
 </div>
 
 <script th:inline="javascript">
+    $(function () {
+        refreshCommits(1);
+        refreshOtherVideoOfUser();
+    });
+
     $("#submitButton").click(function () {
         var contents = UE.getEditor('container').getContent();
+        var path = [[${#request.getContextPath()}]];
+        //alert(contents);
         $.ajax({
-            url:
+            url: path + "/Commits",
+            data: {
+                contents : contents,
+                authorid : [[${userInfo.id}]],
+                videoId: [[${videoInfo.id}]]
+            },
+            type: "post",
+            success: function(data){
+                if(data=="true"){
+                    //alert("评论成功！");
+                    UE.getEditor('container').setContent('');
+                    refreshCommits(1);
+                }
+            },
+            error:function() {
+                alert("失败了");
+            }
         });
     });
+
+    function refreshOtherVideoOfUser() {
+        var path = [[${#request.getContextPath()}]]+"/otherVideo/"+[[${videoInfo.authorid}]];
+        console.log(path);
+        $.ajax({
+            url: path,
+            data: {
+                videoId: [[${videoInfo.id}]]
+            },
+            type: "get",
+            dataType: "json",
+            success: function(data){
+               //alert(data);
+                putVideosInDiv(data);
+            }
+        });
+
+    }
+
+    function putVideosInDiv(data) {
+        $("#otherVideoOfUser").empty().append("<p>作者相关推荐</p>");
+        var path = [[${#request.getContextPath()}]];
+        $.each(data,function(i,item) {
+
+            //var date = new Date(item.createTime);
+            //var datestring = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            $("#otherVideoOfUser").append(
+                "<div class=\"row\" id='videoOther"+item.id+"'><div class=\"col-sm-5\">" +
+                "<img src='" + item.vedioCoverPic + "' height='60px' width='100px'></img>" +
+                "</div>" +
+                "<div class=\"col-sm-7\">" +
+                "<span><label>" + item.name + "</label><br/>" +
+                "<label>" + item.description + "</label></span>" +
+                "</div></div><br/>"
+            );
+            $("#videoOther"+item.id).click(function () {
+                window.location.href = [[${#request.getContextPath()}]] + "/playVideoPage/" + item.id;
+            });
+        });
+    }
+    
+    function refreshCommits(pageNum) {
+        var path = [[${#request.getContextPath()}]]+"/Commits/video/"+[[${videoInfo.id}]];
+        $.ajax({
+            url: path,
+            data: {
+                startPage: pageNum,
+                pageSize: 10
+            },
+            type: "get",
+            dataType: "json",
+            success: function(data){
+                //alert(data);
+                putCommitsInDiv(data);
+            }
+        });
+    }
+
+    function putCommitsInDiv(data) {
+        $("#commitsFather").empty();
+        $.each(data.list,function(i,item){
+            var date = new Date(item.createTime);
+            var datestring = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            $("#commitsFather").append(
+                "<div class=\"row\"><div class=\"col-sm-1\">"+
+                    "<span>"+item.authorid+"</span>"+
+                    "</div>"+
+                    "<div class=\"col-sm-11\">"+
+                    "<span><label>发表日期:&nbsp;&nbsp;&nbsp;"+datestring+"</label><br/>"+
+                    "<label>"+item.contents+"</label></span>"+
+                "</div></div><br/>"
+            );
+        });
+    }
 </script>
 
 <div th:include="footer :: footer"></div>

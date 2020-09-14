@@ -132,4 +132,11 @@ public class VideoController {
         }
         return rate;
     }
+
+
+    @RequestMapping(value = "/otherVideo/{authorid}",method = RequestMethod.GET)
+    @ResponseBody
+    public String getVideoInfo(@PathVariable("authorid") Integer authorid,@RequestParam("videoId") Integer id){
+        return videoService.getVideoInfo(authorid, id);
+    }
 }

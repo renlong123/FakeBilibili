@@ -45,4 +45,15 @@ public class VideoDAOImpl implements VideoDAO {
 
         return videoInfoByUserId;
     }
+
+    @Override
+    public List<Video> getVideosInfoExceptsId(Integer authorid, Integer id) {
+        System.out.println(authorid + "=======查询前=======" +id);
+        List<Video> videos = videoMapper.getVideosInfoExceptsId(authorid, id);
+        for(Video video:videos){
+            System.out.println(video.getId() + "=======查询后=======" +video.getAuthorid());
+        }
+
+        return videos;
+    }
 }
