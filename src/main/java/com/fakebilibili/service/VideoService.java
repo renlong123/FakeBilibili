@@ -25,4 +25,6 @@ public interface VideoService {
     public String getVideoAndOtherInfo(Integer id, Model model);
 
     public String getVideoInfo(Integer authorid,Integer id);
+
+    public List<Video> getAllVidesInfo();
 }

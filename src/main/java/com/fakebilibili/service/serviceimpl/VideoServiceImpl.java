@@ -150,6 +150,12 @@ public class VideoServiceImpl implements VideoService {
         return json;
     }
 
+    @Override
+    public List<Video> getAllVidesInfo() {
+        List<Video> videos = videoDAO.getIndexVideosInfo();
+        return videos;
+    }
+
 
     /**
      下边这个是好方法，希望各位能用起来，虽然是个小方法，但我其实真不舍得贴出来，是JAVA自带的方法

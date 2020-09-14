@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -138,5 +139,12 @@ public class VideoController {
     @ResponseBody
     public String getVideoInfo(@PathVariable("authorid") Integer authorid,@RequestParam("videoId") Integer id){
         return videoService.getVideoInfo(authorid, id);
+    }
+
+    @RequestMapping(value = {"/","index","hello"},method = RequestMethod.GET)
+    public String getVideosInfo(Model model){
+        List<Video> videos = videoService.getAllVidesInfo();
+        model.addAttribute("videos",videos);
+        return "index";
     }
 }

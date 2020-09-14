@@ -56,4 +56,10 @@ public class VideoDAOImpl implements VideoDAO {
 
         return videos;
     }
+
+    @Override
+    public List<Video> getIndexVideosInfo(){
+        List<Video> videos = videoMapper.getIndexVideosInfo();
+        return videos;
+    }
 }

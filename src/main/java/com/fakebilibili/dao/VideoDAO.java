@@ -18,4 +18,6 @@ public interface VideoDAO {
     public List<Video> getVideoInfoByUserId(Integer userId);
 
     public List<Video> getVideosInfoExceptsId(Integer authorid, Integer id);
+
+    public List<Video> getIndexVideosInfo();
 }
