@@ -3,7 +3,9 @@ package com.fakebilibili.dao.daoimpl;
 import com.fakebilibili.dao.UserDAO;
 import com.fakebilibili.entity.User;
 import com.fakebilibili.entity.UserExample;
+import com.fakebilibili.entity.UserToUser;
 import com.fakebilibili.mapper.UserMapper;
+import com.fakebilibili.mapper.UserToUserMapper;
 import org.junit.jupiter.api.DynamicTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +20,8 @@ public class UserDAOImpl implements UserDAO {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserToUserMapper userToUserMapper;
 
     /**
      * 数据库访问层通过Id查询用户
@@ -81,5 +85,24 @@ public class UserDAOImpl implements UserDAO {
         }else{
             return null;
         }
+    }
+
+    @Override
+    public Integer checkFollowStatus(Integer userupId, Integer userfollowsId) {
+        Integer i = userToUserMapper.selectFollowStatus(userupId, userfollowsId);
+        System.out.println(i);
+        return i;
+    }
+
+    @Override
+    public int insertUsertoUser(UserToUser userToUser) {
+        int insert = userToUserMapper.insert(userToUser);
+        return insert;
+    }
+
+    @Override
+    public int deleteUsertoUserById(Integer id) {
+        int i = userToUserMapper.deleteByPrimaryKey(id);
+        return i;
     }
 }

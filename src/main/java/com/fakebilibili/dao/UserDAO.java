@@ -1,7 +1,9 @@
 package com.fakebilibili.dao;
 
 import com.fakebilibili.entity.User;
+import com.fakebilibili.entity.UserToUser;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface UserDAO {
 
@@ -14,4 +16,10 @@ public interface UserDAO {
     public int deleteUserById(Integer id);
 
     public User selectUserByName(String username);
+
+    public Integer checkFollowStatus(Integer userupId,Integer userfollowsId);
+
+    public int insertUsertoUser(UserToUser usertoUser);
+
+    public int deleteUsertoUserById(Integer id);
 }

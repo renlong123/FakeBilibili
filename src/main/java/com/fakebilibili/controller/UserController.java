@@ -194,4 +194,22 @@ public class UserController {
 
         return "personIndex";
     }
+
+
+    /*检查关注状态*/
+    @RequestMapping(value = "/checkIsFollowed",method = RequestMethod.GET)
+    @ResponseBody
+    public String checkIsFollowed(@RequestParam("videoAuthorid")Integer userupId,
+                                  @RequestParam("thisUserId")Integer userfollowsId){
+        System.out.println(userupId+"===="+userfollowsId);
+        return userService.checkFollowStatus(userupId,userfollowsId);
+    }
+
+    /*切换关注状态*/
+    @RequestMapping(value = "/changeFollowedStatus",method = RequestMethod.POST)
+    @ResponseBody
+    public String changeFollowedStatus(@RequestParam("videoAuthorid")Integer userupId,
+                                  @RequestParam("thisUserId")Integer userfollowsId){
+        return userService.changeFollowedStatus(userupId,userfollowsId);
+    }
 }

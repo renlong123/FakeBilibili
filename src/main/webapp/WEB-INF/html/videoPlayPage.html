@@ -104,8 +104,11 @@
                 </div>
             </div>
             <br/>
-            <div>
-                <button class="btn btn-success btn-sm btn-block" >关注</button>
+            <div th:if="${userInfo.id}==${#session.getAttribute('userId')}">
+                <button class="btn btn-success btn-sm btn-block" disabled>这是自己哦</button>
+            </div>
+            <div th:if="${userInfo.id}!=${#session.getAttribute('userId')}">
+                <input type="button" class="btn btn-success btn-sm btn-block" id="followThisButton" value="+ 关注">
             </div>
             <br/>
             <div id="otherVideoOfUser">
@@ -119,7 +122,54 @@
     $(function () {
         refreshCommits(1);
         refreshOtherVideoOfUser();
+        checkIsFollowed();
+        $("#followThisButton").click(followsUserFun);
     });
+
+    /*检查是否有关注关系*/
+    function checkIsFollowed() {
+        var thisUserId = [[${session.userId}]];
+        var videoAuthorid = [[${userInfo.id}]];
+        //alert(thisUserId+"========="+videoAuthorid);
+        var path = [[${#request.getContextPath()}]];
+        $.ajax({
+            url: path+"/checkIsFollowed",
+            data:{
+                thisUserId: thisUserId,
+                videoAuthorid: videoAuthorid
+            },
+            type: "get",
+            success: function (data) {
+                //alert(TypeOf(data));
+                if(data.toString()=="Followed"){
+                    //alert(data);
+                    $("#followThisButton").val("已关注，取消关注？");
+                }
+            }
+        });
+    }
+
+    /*改变关注状态*/
+    function followsUserFun(){
+        var thisUserId = [[${session.userId}]];
+        var videoAuthorid = [[${userInfo.id}]];
+        var path = [[${#request.getContextPath()}]];
+        $.ajax({
+            url: path+"/changeFollowedStatus",
+            data:{
+                thisUserId: thisUserId,
+                videoAuthorid: videoAuthorid
+            },
+            type: "post",
+            success: function (data) {
+                if(data.toString()=="NoFollow"){
+                    $("#followThisButton").val("+ 关注");
+                }else{
+                    $("#followThisButton").val("已关注，取消关注？");
+                }
+            }
+        });
+    }
 
     $("#submitButton").click(function () {
         var contents = UE.getEditor('container').getContent();
@@ -219,6 +269,8 @@
             );
         });
     }
+
+
 </script>
 
 <div th:include="footer :: footer"></div>

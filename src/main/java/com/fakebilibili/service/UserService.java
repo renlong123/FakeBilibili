@@ -29,4 +29,9 @@ public interface UserService {
     public String putUserInfoToSession(HttpSession session);
 
     public int updateUserOptional(User user,HttpSession session);
+
+    public String checkFollowStatus(Integer userupId,Integer userfollowsId);
+
+    public String changeFollowedStatus(Integer userupId,Integer userfollowsId);
+
 }

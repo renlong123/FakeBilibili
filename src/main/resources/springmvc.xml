@@ -97,7 +97,7 @@
 
     <bean id="multipartResolver" class="com.fakebilibili.listener.CustomMultiResolver">
         <property name="maxUploadSize">
-            <value>52428000000</value>
+            <value>5242800000</value>
         </property>
         <property name="defaultEncoding">
             <value>utf-8</value>

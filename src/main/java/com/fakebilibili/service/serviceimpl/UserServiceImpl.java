@@ -3,7 +3,9 @@ package com.fakebilibili.service.serviceimpl;
 import com.fakebilibili.dao.UserDAO;
 import com.fakebilibili.dao.daoimpl.UserDAOImpl;
 import com.fakebilibili.entity.User;
+import com.fakebilibili.entity.UserToUser;
 import com.fakebilibili.mapper.UserMapper;
+import com.fakebilibili.mapper.UserToUserMapper;
 import com.fakebilibili.service.UserService;
 import com.fakebilibili.util.ImageUtil;
 import com.fakebilibili.util.MailUtil;
@@ -189,5 +191,30 @@ public class UserServiceImpl implements UserService {
             putUserInfoToSession(session);
         }
         return result;
+    }
+
+    /*检测关注状态*/
+    @Override
+    public String checkFollowStatus(Integer userupId, Integer userfollowsId) {
+        Integer i = userDAO.checkFollowStatus(userupId, userfollowsId);
+        if(i!=null){
+            return "Followed";
+        }
+        return "NoFollow";
+    }
+
+    @Override
+    public String changeFollowedStatus(Integer userupId, Integer userfollowsId) {
+        Integer i = userDAO.checkFollowStatus(userupId, userfollowsId);
+        if(i==null){
+            UserToUser userToUser = new UserToUser();
+            userToUser.setUserupId(userupId);
+            userToUser.setUserfollowsId(userfollowsId);
+            int i1 = userDAO.insertUsertoUser(userToUser);
+            return "Followed";
+        }else{
+            int i1 = userDAO.deleteUsertoUserById(i);
+            return "NoFollow";
+        }
     }
 }
