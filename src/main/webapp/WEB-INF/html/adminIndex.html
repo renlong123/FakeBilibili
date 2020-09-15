@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base href="${#request.getContextPath()+'/'}"/>
+<!--    <link rel="stylesheet"  th:href="@{/static/bootstrap/css/bootstrap.css }"/>
+    <script type="text/javascript"  th:src="@{/static/bootstrap/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript"  th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>-->
+    <!--<link rel="icon" th：href="@{/static/img/favicon.ico}"/>-->
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css }">
+    <script type="text/javascript"  th:src="@{/static/layui/layui.js}"></script>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+    <title>后台管理界面</title>
+    <style>
+        .rightItem{
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-header header header-user" style="background-color: #24262F;">
+    <div class="layui-container"><a class="logo" href="https://www.layui.com/"> <img
+            src="//res.layui.com/static/images/layui/logo.png" alt="layui"> </a>
+        <div class="layui-form component" lay-filter="LAY-site-header-component"></div>
+        <ul class="layui-nav">
+            <li class="layui-nav-item layui-hide-xs"><a href="//www.layui.com/">框架</a></li>
+            <li class="layui-nav-item"><a href="javascript:;">专区</a>
+                <dl class="layui-nav-child">
+                    <dd lay-unselect><a href="/vipclub/list/layuiadmin/">layuiAdmin</a>
+                        <hr>
+                    </dd>
+                    <dd lay-unselect><a href="/vipclub/list/layim/" target="_blank">LayIM</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-hide-xs "><a href="/extend/">扩展</a></li>
+            <li class="layui-nav-item"><a href="javascript:;">周边</a>
+                <dl class="layui-nav-child">
+                    <dd class="layui-hide-sm layui-show-xs" lay-unselect><a href="//fly.layui.com/extend/">扩展组件</a></dd>
+                    <dd class="layui-hide-sm layui-show-xs" lay-unselect><a href="//fly.layui.com/"
+                                                                            target="_blank">社区交流</a>
+                        <hr>
+                    </dd>
+                    <dd lay-unselect><a href="//www.layui.com/admin/" target="_blank">后台模板<span
+                            class="layui-badge-dot"></span></a></dd>
+                    <dd lay-unselect><a href="//www.layui.com/layim/" target="_blank">即时聊天</a>
+                        <hr>
+                    </dd>
+                    <dd lay-unselect><a href="//www.layui.com/alone.html" target="_blank" lay-unselect>独立组件</a></dd>
+                    <dd lay-unselect><a href="https://fly.layui.com/jie/24209/" target="_blank">Axure 组件</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item fly-layui-user" id="FLY-notice"><a class="fly-nav-avatar" href="/user/"
+                                                                         id="LAY_header_avatar"> <img
+                    src="//res.layui.com/images/fly/avatar/10.jpg"> <cite class="layui-hide-xs">头顶的星空</cite> </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/user/">用户中心</a></dd>
+                    <dd><a href="/user/set/">基本设置</a></dd>
+                    <hr>
+                    <dd><a href="/user/message/">我的消息</a></dd>
+                    <dd><a href="/user/product/">已购产品</a></dd>
+                    <hr style="margin: 5px 0;">
+                    <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script><![endif]-->
+<div class="layui-container fly-marginTop fly-user-main">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user" style="padding: 20px 0;">
+        <li class="layui-nav-item "><a href="/user/"> <i class="layui-icon">&#xe612;</i> 用户中心 </a></li>
+        <li class="layui-nav-item "><a href="/user/set/"> <i class="layui-icon">&#xe620;</i> 基本设置 </a></li>
+        <li class="layui-nav-item "><a href="/user/post/"> <i class="iconfont icon-tiezi"></i> 我的帖子 </a></li>
+        <li class="layui-nav-item "><a href="/user/message/"> <i class="layui-icon">&#xe611;</i> 我的消息 </a></li>
+        <li class="layui-nav-item layui-this"><a href="/user/product/"> <i class="iconfont icon-chanpin"></i> 已购产品 </a>
+        </li>
+        <li class="layui-nav-item "><a href="/user/extend/"> <i class="layui-icon layui-icon-component"></i> 我的组件 </a>
+        </li>
+    </ul>
+    <div class="site-tree-mobile layui-hide"><i class="layui-icon">&#xe602;</i></div>
+    <div class="site-mobile-shade"></div>
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+            <ul class="layui-tab-title">
+                <li class="layui-this">我的 layuiAdmin</li>
+                <li><a href="/user/product/">我的全部产品</a></li>
+            </ul>
+            <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 5px 0;">
+                <div class="layui-tab-item layui-show">
+                    <form action="" class="layui-form">
+                        <div class="layui-form-item" style="margin: 10px 0 0;"><label class="layui-form-label"
+                                                                                      style="width: auto; padding-right: 5px;">别名筛选：</label>
+                            <div class="layui-input-inline"><input type="text" name="alias" class="layui-input"
+                                                                   value="layuiAdmin"></div>
+                            <button type="submit" class="layui-btn">搜索</button>
+                        </div>
+                    </form>
+                    <table id="LAY_productList"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fly-footer"><p>&copy; 2020 <a href="/">layui.com</a> MIT license</p>
+    <p><a href="https://github.com/sentsin/layui/" target="_blank" rel="nofollow">GitHub</a> <a
+            href="https://gitee.com/sentsin/layui" target="_blank" rel="nofollow">码云</a> <a
+            href="http://fly.layui.com/jie/2461/" target="_blank">公众号</a> <a href="http://beian.miit.gov.cn/"
+                                                                             target="_blank" rel="nofollow">赣ICP备13006272号-2</a>
+    </p>
+    <div class="fly-union"><p style="display: block; margin-bottom: 10px;"><span>感谢以下平台提供云加速支持</span>
+        <p><a href="https://console.upyun.com/register/?invite=SJ0wu6g2-" target="_blank" rel="nofollow"
+              sponsor="upyun"> <img src="//res.layui.com/static/images/other/upyun.png?t=1"> </a> <a
+                href="https://www.maoyuncloud.com/?from=layui" target="_blank" rel="nofollow" sponsor="maoyun"> <img
+                src="//cdn.layui.com/upload/2019_5/168_1559291577683_9348.png"> </a></div>
+</div>
+<script src="//res.layui.com/layui/dist/layui.js?t=1599673882207"></script>
+<script>layui.cache.page = 'user';
+layui.cache.user = {
+    username: '头顶的星空',
+    uid: 66012576,
+    avatar: '//res.layui.com/images/fly/avatar/10.jpg',
+    experience: 25,
+    sum: 0,
+    vip: 0,
+    sex: ''
+};
+layui.config({version: "1599673882207"}).extend({'fly': '//res.layui.com/static/lay/modules/fly/index'}).use('fly');</script>
+<script>var _hmt = _hmt || [];
+(function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script>
+<script>layui.data.alias = 'layuiAdmin';</script>
+
+
+<ul class="layui-nav layui-nav-tree" lay-filter="test">
+    <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+    <li class="layui-nav-item layui-nav-itemed" style="text-align: center">
+        <img th:src="@{/static/img/bilibili.png}" style="width: 80px;height: 40px">
+    </li>
+    <li class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;">用户管理</a>
+        <dl class="layui-nav-child">
+            <dd><a href="javascript:;">选项1</a></dd>
+            <dd><a href="javascript:;">选项2</a></dd>
+            <dd><a href="">跳转</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">视频管理</a>
+        <dl class="layui-nav-child">
+            <dd><a href="">移动模块</a></dd>
+            <dd><a href="">后台模版</a></dd>
+            <dd><a href="">电商平台</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item"><a href="">分类管理</a></li>
+    <li class="layui-nav-item"><a href="">评论管理</a></li>
+</ul>
+
+<span class="layui-breadcrumb">
+  <a href="">首页</a>
+  <a href="">国际新闻</a>
+  <a href="">亚太地区</a>
+  <a><cite>正文</cite></a>
+</span>
+
+<div class="layui-card">
+    <div class="layui-card-header">卡片面板</div>
+    <div class="layui-card-body">
+        卡片式面板面板通常用于非白色背景色的主体内<br>
+        从而映衬出边框投影
+    </div>
+</div>
+<script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer
+            ,form = layui.form;
+        layer.msg('Hello World');
+    });
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+</body>
+</html>

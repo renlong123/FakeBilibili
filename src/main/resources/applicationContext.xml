@@ -33,6 +33,17 @@
         <property name="configLocation" value="classpath:mybatis-config.xml"></property>
         <!--为实体类定义别名，可以在mapper中不写全类名-->
         <property name="typeAliasesPackage" value="com.fakebilibili.entity"></property>
+
+        <property name="configurationProperties">
+            <props>
+                <!--全局映射器启用缓存-->
+                <prop key ="cacheEnabled">true</prop>
+                <!--查询时，关闭关连对象即时加载以提高性能-->
+                <prop key="lazyLoadingEnabled">false</prop>
+                <!-- 设置关联对象加载的形态，此处为按需要加载字段（加载字段由sql决定），不会加载关联表的所有字段，以提高性能-->
+                <prop key="aggressiveLazyLoading">true</prop>
+            </props>
+        </property>
     </bean>
 
     <!--定义mapper文件所在包，mybatis扫描该包-->
