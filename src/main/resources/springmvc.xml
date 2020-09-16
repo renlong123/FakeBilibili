@@ -65,7 +65,7 @@
     <!-- Spring MVC提供的简单异常处理器SimpleMappingExceptionResolver-全局异常配置 start -->
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <!--  默认的错误信息页面-->
-        <property name="defaultErrorView" value="/WEB-INF/html/error/500.html"/>
+        <property name="defaultErrorView" value="error/500.html"/>
         <!--定义异常信息变量名，默认为exception-->
         <property name="exceptionAttribute" value="exception"></property>
         <!--定义需要特殊处理的异常-->

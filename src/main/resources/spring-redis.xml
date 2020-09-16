@@ -22,16 +22,30 @@
         <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
     </bean>
 
-    <!-- 连接池配置，类似数据库连接池 -->
-    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
-        <property name="hostName" value="${redis.host}"></property>
-        <property name="port" value="${redis.port}"></property>
-        <!-- <property name="password" value="${redis.pass}"></property> -->
-        <property name="poolConfig"  ref="poolConfig"></property>
+
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="host" value="${redis.host}"></constructor-arg>
+        <constructor-arg name="port" value="${redis.port}"></constructor-arg>
+        <constructor-arg name="timeout" value="${redis.timeout}"></constructor-arg>
+        <!--<constructor-arg name="password" value="${redis.password}"></constructor-arg>-->
+        <constructor-arg name="poolConfig" ref="poolConfig"></constructor-arg>
+
+       <!-- <property name="password" value="1"></property>-->
     </bean>
 
-    <bean id="redisCacheTransfer" class="cn.qlq.jedis.RedisCacheTransfer">
-        <property name="jedisConnectionFactory" ref="jedisConnectionFactory" />
-    </bean>
+
+
+    <!-- 对象序列化方式 -->
+<!--    <bean id="jdkSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+    <bean id="stringSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+    &lt;!&ndash;想使用json,要依赖json的3个包,jackson-core,jackson-annotationsjackson-databind&ndash;&gt;
+    <bean id="jackson2JsonRedisSerializer" class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>-->
+<!--    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory"   ref="jedisConnectionFactory" />
+        <property name="keySerializer" ref="stringSerializer"/>
+        <property name="hashKeySerializer" ref="stringSerializer"/>
+        <property name="valueSerializer" ref="jackson2JsonRedisSerializer"/>
+        <property name="hashValueSerializer" ref="jackson2JsonRedisSerializer"/>
+    </bean>-->
 
 </beans>

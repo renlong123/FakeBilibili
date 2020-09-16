@@ -1,11 +1,13 @@
 package com.fakebilibili.dao.daoimpl;
 
+import com.fakebilibili.dao.RediasDAO;
 import com.fakebilibili.dao.UserDAO;
 import com.fakebilibili.entity.User;
 import com.fakebilibili.entity.UserExample;
 import com.fakebilibili.entity.UserToUser;
 import com.fakebilibili.mapper.UserMapper;
 import com.fakebilibili.mapper.UserToUserMapper;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.DynamicTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -22,6 +25,8 @@ public class UserDAOImpl implements UserDAO {
     private UserMapper userMapper;
     @Autowired
     private UserToUserMapper userToUserMapper;
+    @Autowired
+    private RediasDAO redisDAO;
 
     /**
      * 数据库访问层通过Id查询用户
@@ -30,8 +35,30 @@ public class UserDAOImpl implements UserDAO {
      */
     @Override
     public User selectUserById(Integer id) {
-        System.out.println(userMapper);
-        return userMapper.selectByPrimaryKey(id);
+        //Map<String, String> stringStringMap = redisDAO.hgetAll("userInfo" + id);
+        String s = redisDAO.get("userInfo" + id);
+        User user = null;
+        if(s==null || s.equals("")){
+            user = userMapper.selectByPrimaryKey(id);
+            Gson gson = new Gson();
+            String json = gson.toJson(user);
+            redisDAO.set("userInfo" + id,json);
+            //setUserToRedis(user);
+/*            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Gson gson = new Gson();
+                    String json = gson.toJson(user);
+                    redisDAO.set("userInfo" + id,json);
+                }
+            }).start();*/
+        }else{
+            Gson gson = new Gson();
+            String s1 = redisDAO.get("userInfo" + id);
+            user = gson.fromJson(s1,User.class);
+        }
+        //System.out.println(userMapper);
+        return user;
     }
 
     /**
@@ -41,7 +68,9 @@ public class UserDAOImpl implements UserDAO {
      */
     @Override
     public int insertUser(User user) {
+
         int result = userMapper.insert(user);
+
         return result;
     }
 
@@ -63,6 +92,10 @@ public class UserDAOImpl implements UserDAO {
      */
     @Override
     public int deleteUserById(Integer id) {
+        String s = redisDAO.get("userInfo" + id);
+        if(s!=null){
+            redisDAO.del("userInfo" + id);
+        }
         int result = userMapper.deleteByPrimaryKey(id);
         return result;
     }
@@ -74,6 +107,8 @@ public class UserDAOImpl implements UserDAO {
      */
     @Override
     public User selectUserByName(String username) {
+        //redisDAO.hget("userInfo",username);
+
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         if(username != null){

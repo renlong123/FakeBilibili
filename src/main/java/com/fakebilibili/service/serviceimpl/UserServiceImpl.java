@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
             return "redirect:/personIndex";
         } else {
             User user = userDAO.selectUserByName(username);
+
             if(user == null){
                 request.setAttribute("loginErrorTips", "用户不存在");
                 return "login";

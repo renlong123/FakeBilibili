@@ -2,18 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
        xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <!--扫描注入service层bean-->
     <context:component-scan base-package="com.fakebilibili"></context:component-scan>
 
     <!--placerholer可以读取配置文件，单独进行配置，注意placerholer默认只能定义一次，多余的spring会自动忽略。
     只需要在context:property-placeholder标签中添加一个属性ignore-unresolvable="true"即可-->
-    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"></context:property-placeholder>
 
     <!--配置连接池-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
@@ -68,6 +68,7 @@
         <aop:advisor advice-ref="txAdvice" pointcut-ref="pointService"></aop:advisor>
     </aop:config>
 
+    <import resource="spring-redis.xml"></import>
 </beans>
 
 
