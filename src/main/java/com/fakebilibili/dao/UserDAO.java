@@ -5,6 +5,8 @@ import com.fakebilibili.entity.UserToUser;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 public interface UserDAO {
 
     public User selectUserById(Integer id);
@@ -22,4 +24,6 @@ public interface UserDAO {
     public int insertUsertoUser(UserToUser usertoUser);
 
     public int deleteUsertoUserById(Integer id);
+
+    public List<User> getAllUsers();
 }

@@ -212,4 +212,12 @@ public class UserController {
                                   @RequestParam("thisUserId")Integer userfollowsId){
         return userService.changeFollowedStatus(userupId,userfollowsId);
     }
+
+
+    @RequestMapping(value = "/getUserListPage",method = RequestMethod.GET)
+    public String getUserListPage(Model model,Integer page,Integer pageSize){
+        //userService.ge
+        userService.getAllUsers(model,page,pageSize);
+        return "admin/userListPage";
+    }
 }

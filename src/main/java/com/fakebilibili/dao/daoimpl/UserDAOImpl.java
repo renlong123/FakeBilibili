@@ -140,4 +140,14 @@ public class UserDAOImpl implements UserDAO {
         int i = userToUserMapper.deleteByPrimaryKey(id);
         return i;
     }
+
+    /**
+     * 获取所有用户
+     * @return
+     */
+    @Override
+    public List<User> getAllUsers() {
+        List<User> users = userMapper.selectByExample(null);
+        return users;
+    }
 }

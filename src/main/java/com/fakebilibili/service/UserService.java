@@ -2,6 +2,7 @@ package com.fakebilibili.service;
 
 import com.fakebilibili.entity.User;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -34,4 +35,5 @@ public interface UserService {
 
     public String changeFollowedStatus(Integer userupId,Integer userfollowsId);
 
+    public String getAllUsers(Model model, Integer page, Integer pageSize);
 }

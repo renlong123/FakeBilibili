@@ -9,9 +9,11 @@ import com.fakebilibili.mapper.UserToUserMapper;
 import com.fakebilibili.service.UserService;
 import com.fakebilibili.util.ImageUtil;
 import com.fakebilibili.util.MailUtil;
+import com.github.pagehelper.PageHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -217,5 +220,19 @@ public class UserServiceImpl implements UserService {
             int i1 = userDAO.deleteUsertoUserById(i);
             return "NoFollow";
         }
+    }
+
+    @Override
+    public String getAllUsers(Model model, Integer page, Integer pageSize) {
+        /*        PageHelper.startPage(page,pageSize);
+        List<Video> videos = videoDAO.getVideoInfoByUserId(userId);
+        PageInfo<Video> pageInfo = new PageInfo<>(videos);
+        Gson gson = new Gson();
+        String json = gson.toJson(pageInfo);
+        return json;*/
+        PageHelper.startPage(page,pageSize);
+        List<User> users = userDAO.getAllUsers();
+        model.addAttribute("users",users);
+        return null;
     }
 }
