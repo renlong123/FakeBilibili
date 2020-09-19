@@ -1,3 +1,4 @@
+/*
 package com.fakebilibili;
 
 import com.fakebilibili.dao.UserDAO;
@@ -42,3 +43,4 @@ public class MBGTest {
         System.out.println(user);
     }
 }
+*/
